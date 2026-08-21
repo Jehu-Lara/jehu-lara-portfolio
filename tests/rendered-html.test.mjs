@@ -46,9 +46,11 @@ const routes = [
   ["/", "en", "I turn operational data into auditable decisions.", "/es"],
   ["/work", "en", "Work", "/es/work"],
   ["/work/qualityops", "en", "QualityOps", "/es/work/qualityops"],
+  ["/work/paro-live-oee-platform", "en", "PARO Live OEE", "/es/work/paro-live-oee-platform"],
   ["/es", "es-MX", "Convierto datos operativos en decisiones auditables.", "/"],
   ["/es/work", "es-MX", "Proyectos", "/work"],
   ["/es/work/qualityops", "es-MX", "QualityOps", "/work/qualityops"],
+  ["/es/work/paro-live-oee-platform", "es-MX", "PARO OEE en vivo", "/work/paro-live-oee-platform"],
 ];
 
 const linkedInUrl = "https://www.linkedin.com/in/jehu-lara-corona-601956332/";
@@ -75,7 +77,7 @@ const deckHashes = {
   "es/05-roadmap.png": "AC3DB643A767D71AA9275369ACA91447CA2AC5A8DFD0D3E3B2ECA82803771C5C",
 };
 
-test("server-renders all six localized routes with semantic essentials", async () => {
+test("server-renders all eight localized routes with semantic essentials", async () => {
   const titles = new Set();
   const descriptions = new Set();
 
@@ -146,11 +148,11 @@ test("home leads with personal identity and keeps the project subordinate", asyn
     assert.match(visibleHtml, /aria-live="polite"/);
     assert.equal(countMatches(visibleHtml, /data-work-preview-id=/g), 2, `${pathname} has two reel indicators`);
     assert.match(visibleHtml, /data-work-preview-id="qualityops"/);
-    assert.match(visibleHtml, /data-work-preview-id="paro"/);
+    assert.match(visibleHtml, /data-work-preview-id="paro-live-oee-platform"/);
     assert.match(visibleHtml, /Previous project|Proyecto anterior/);
     assert.match(visibleHtml, /Next project|Proyecto siguiente/);
     assert.match(visibleHtml, pathname === "/" ? /href="\/work\/qualityops"/ : /href="\/es\/work\/qualityops"/);
-    assert.doesNotMatch(visibleHtml, /href="\/(?:es\/)?work\/paro"/);
+    assert.match(visibleHtml, /two versioned open-source cases|dos casos de código abierto versionados/);
     assert.equal(countMatches(visibleHtml, /<article class="project-card project-card--preview/g), 1, `${pathname} renders only the active slide`);
   }
 });
@@ -162,8 +164,8 @@ test("project archive and cases come from the reusable project contract", async 
     assert.match(html, /Independent open-source technical project|Proyecto técnico independiente y de código abierto/);
     assert.match(html, /2026/);
     assert.match(html, /Manufacturing analytics|Análisis de manufactura/);
-    assert.equal(countMatches(html, /<article class="project-card/g), 1);
-    assert.doesNotMatch(visibleHtml, />PARO</, `${pathname} does not add PARO to the archive`);
+    assert.equal(countMatches(html, /<article class="project-card/g), 2);
+    assert.match(visibleHtml, /PARO Live OEE|PARO OEE en vivo/);
   }
 
   for (const pathname of ["/work/qualityops", "/es/work/qualityops"]) {
@@ -214,6 +216,39 @@ test("project archive and cases come from the reusable project contract", async 
     assert.match(html, /"@type":"SoftwareSourceCode"/);
     assert.doesNotMatch(html, /loaded_at|QUALITYOPS_DATABASE_URL|qualityops_powerbi_reader/i);
   }
+
+  for (const pathname of ["/work/paro-live-oee-platform", "/es/work/paro-live-oee-platform"]) {
+    const { html } = await render(pathname);
+    const visibleHtml = html.replace(/<script[\s\S]*?<\/script>/gi, "");
+    const locale = pathname.startsWith("/es") ? "es" : "en";
+    const oppositeLocale = locale === "en" ? "es" : "en";
+    assert.match(html, /9ad5798940efb6960deb3433bdd01a95a52aef50/);
+    assert.match(html, /208/);
+    assert.match(html, /15 min/);
+    assert.match(html, /48 h/);
+    assert.match(html, /22\.1%/);
+    assert.match(html, /synthetic|sintético/i);
+    assert.match(html, /Power BI Desktop refreshed successfully|Power BI Desktop actualizó correctamente/);
+    assert.match(html, /Render write authentication and the 15-minute cron were active|autenticación de escritura en Render y el cron de 15 minutos estaban activos/);
+    assert.equal(countMatches(html, /class="architecture-flow__number"/g), 4);
+    assert.equal(countMatches(html, /class="evidence-thumbnail"/g), 3);
+    assert.match(html, new RegExp(`/presentations/paro/${locale}/01-case-study\\.png`));
+    assert.doesNotMatch(html, new RegExp(`/presentations/paro/${oppositeLocale}/`));
+    assert.match(html, /View code|Ver código/);
+    assert.match(html, /Review deployment contract|Revisar contrato de despliegue/);
+    assert.match(html, /href="https:\/\/paro-public\.onrender\.com\/demo"/);
+    assert.match(visibleHtml, /Live demo|Demo en vivo/i);
+    assert.doesNotMatch(html, /mailto:|Jehulara422@gmail\.com/i);
+    assert.match(html, /"@type":"SoftwareSourceCode"/);
+    if (locale === "en") {
+      assert.match(html, /PARO Live OEE evidence presentation/);
+      assert.match(visibleHtml, /·\s*(?:<!-- -->\s*)?source/);
+    } else {
+      assert.match(html, /Presentación de evidencia de PARO OEE en vivo/);
+      assert.match(visibleHtml, /·\s*(?:<!-- -->\s*)?fuente/);
+      assert.doesNotMatch(visibleHtml, /·\s*(?:<!-- -->\s*)?source/);
+    }
+  }
 });
 
 test("assets, reel, visual tokens, gallery behavior, and dependency boundary match the contract", async () => {
@@ -247,6 +282,26 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
   });
   assert.equal(observedDeckHashes.size, 10, "all ten deck exports are unique");
 
+  const paroThumb = await readFile(new URL("../public/paro-live-oee-thumbnail.png", import.meta.url));
+  const paroSlides = await Promise.all(
+    ["en", "es"].flatMap((locale) =>
+      ["01-case-study.png", "02-case-study.png", "03-case-study.png"].map((name) =>
+        readFile(new URL(`../public/presentations/paro/${locale}/${name}`, import.meta.url)),
+      ),
+    ),
+  );
+  assert.deepEqual([paroThumb.readUInt32BE(16), paroThumb.readUInt32BE(20)], [1000, 750]);
+  paroSlides.forEach((asset) => {
+    assert.deepEqual([asset.readUInt32BE(16), asset.readUInt32BE(20)], [1920, 1080]);
+  });
+  for (let index = 0; index < 3; index += 1) {
+    assert.equal(
+      createHash("sha256").update(paroSlides[index]).digest("hex"),
+      createHash("sha256").update(paroSlides[index + 3]).digest("hex"),
+      `PARO slide ${index + 1} is intentionally identical across locale folders`,
+    );
+  }
+
   assert.ok(contrastRatio("10233f", "f4efe4") >= 4.5, "navy text on ivory");
   assert.ok(contrastRatio("006b62", "f4efe4") >= 4.5, "teal text on ivory");
   assert.ok(contrastRatio("10233f", "f3d59a") >= 4.5, "navy text on amber");
@@ -255,6 +310,7 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /:focus-visible/);
   assert.match(css, /min-height:\s*44px/);
+  assert.match(css, /\.case-hero__actions a\s*\{[^}]*min-height:\s*48px/s);
   const projectMediaRule = css.match(/\.project-card__media\s*\{([^}]*)\}/s)?.[1] ?? "";
   assert.match(projectMediaRule, /width:\s*100%/);
   assert.match(projectMediaRule, /min-width:\s*0/);
@@ -296,6 +352,7 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
   assert.match(gallery, /decoding="async"/);
   assert.match(gallery, /Open full-resolution slide/);
   assert.match(gallery, /Abrir diapositiva en resolución completa/);
+  assert.match(gallery, /project\.slug === "paro-live-oee-platform" \? "paro" : project\.slug/);
   assert.match(gallery, /ArrowLeft/);
   assert.match(gallery, /ArrowRight/);
   assert.match(gallery, /event\.key === "Escape" && dialogRef\.current\?\.open/);
@@ -316,12 +373,10 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
   assert.match(reel, /const currentItem = items\[currentIndex\]/);
   assert.doesNotMatch(reel, /setInterval|autoPlay|autoplay/);
   assert.equal(countMatches(workPreviews, /\nid: |\n {4}id:/g), 2, "the reel data has two previews");
-  assert.match(workPreviews, /id: "paro"[\s\S]*?status: "development"/);
-  assert.match(workPreviews, /The OEE engine, migrations, HTTP API, and two analytical views already exist/);
-  assert.match(workPreviews, /Local development uses SQLite; PostgreSQL is validated in CI/);
-  assert.match(workPreviews, /Synthetic demonstration data · No frontend, authentication, sensors, or MES integration/);
-  const paroPreview = workPreviews.match(/id: "paro"([\s\S]*?)\n {2}},\n\];/)?.[1] ?? "";
-  assert.doesNotMatch(paroPreview, /caseSlug|href|https?:\/\//i, "PARO has no false route or public link");
+  assert.match(workPreviews, /getProject\("paro-live-oee-platform"\)/);
+  assert.match(workPreviews, /status: "published"/);
+  assert.match(workPreviews, /caseSlug: paro\.slug/);
+  assert.match(workPreviews, /src: paro\.images\[0\]\.src/);
   assert.match(css, /\.selected-work-reel__viewport\s*\{[^}]*overflow:\s*hidden[^}]*touch-action:\s*pan-y/s);
   assert.match(css, /\.selected-work-reel__indicators\s*\{[^}]*overflow-x:\s*auto[^}]*scroll-snap-type:\s*inline mandatory/s);
   assert.doesNotMatch(packageJson, /react-loading-skeleton|drizzle|animation|analytics/i);

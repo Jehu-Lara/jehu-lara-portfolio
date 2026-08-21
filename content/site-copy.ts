@@ -15,7 +15,7 @@ export const siteCopy = {
     viewWork: "View selected work",
     selectedWork: "Selected work",
     selectedWorkIntro:
-      "One published case with inspectable evidence is available today, alongside one additional project in development.",
+      "Two published cases make their evidence, limits, and current verification state inspectable.",
     selectedWorkReelLabel: "Selected work reel",
     selectedWorkPrevious: "Previous project",
     selectedWorkNext: "Next project",
@@ -61,7 +61,7 @@ export const siteCopy = {
     contactEyebrow: "Contact",
     contactTitle: "Review the work or start a conversation",
     contactBody:
-      "Email is available for direct contact, GitHub contains the source and versioned evidence behind the published case, and LinkedIn is available for professional contact.",
+      "Email is available for direct contact, GitHub contains the source and versioned evidence behind the published cases, and LinkedIn is available for professional contact.",
     visitGithub: "Visit Jehu Lara on GitHub",
     visitLinkedin: "Connect with Jehu Lara on LinkedIn",
     archiveEyebrow: "Project archive",
@@ -102,7 +102,7 @@ export const siteCopy = {
     viewWork: "Ver trabajo seleccionado",
     selectedWork: "Trabajo seleccionado",
     selectedWorkIntro:
-      "Hoy hay un caso publicado con evidencia inspeccionable y un proyecto adicional en desarrollo.",
+      "Dos casos publicados hacen inspeccionables su evidencia, límites y estado actual de verificación.",
     selectedWorkReelLabel: "Reel de trabajo seleccionado",
     selectedWorkPrevious: "Proyecto anterior",
     selectedWorkNext: "Proyecto siguiente",

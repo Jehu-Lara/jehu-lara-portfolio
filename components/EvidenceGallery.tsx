@@ -16,9 +16,10 @@ export function EvidenceGallery({ project, locale }: { project: Project; locale:
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const pointerStartX = useRef<number | null>(null);
   const currentItem = items[currentIndex];
+  const presentationDirectory = project.slug === "paro-live-oee-platform" ? "paro" : project.slug;
 
   function imageSource(item: EvidencePresentationItem) {
-    return `/presentations/qualityops/${locale}/${localize(item.image.src, locale)}`;
+    return `/presentations/${presentationDirectory}/${locale}/${localize(item.image.src, locale)}`;
   }
 
   function slideStatus(index: number) {
@@ -78,7 +79,13 @@ export function EvidenceGallery({ project, locale }: { project: Project; locale:
   return (
     <section
       className="evidence-gallery"
-      aria-label={copy.presentationLabel}
+      aria-label={
+        project.slug === "qualityops"
+          ? copy.presentationLabel
+          : locale === "en"
+            ? `${localize(project.title, locale)} evidence presentation`
+            : `Presentación de evidencia de ${localize(project.title, locale)}`
+      }
     >
       <header className="evidence-gallery__header">
         <div>

@@ -18,6 +18,7 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
   const copy = siteCopy[locale];
   const isEnglish = locale === "en";
   const commitUrl = `${project.repositoryUrl}/commit/${project.evidenceCommit}`;
+  const caseCopy = project.caseCopy;
 
   return (
     <SiteShell locale={locale} pageKind="project" slug={project.slug}>
@@ -30,7 +31,7 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
           codeRepository: project.repositoryUrl,
           license: `${project.repositoryUrl}/blob/${project.evidenceCommit}/LICENSE`,
           dateModified: project.evidenceDate,
-          programmingLanguage: ["Python", "SQL", "DAX"],
+          programmingLanguage: caseCopy?.programmingLanguages ?? ["Python", "SQL", "DAX"],
         }}
       />
 
@@ -48,7 +49,7 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
           </div>
           <div>
             <dt>{isEnglish ? "Evidence" : "Evidencia"}</dt>
-            <dd>{isEnglish ? "Aug 14, 2026" : "14 ago 2026"}</dd>
+            <dd>{caseCopy ? localize(caseCopy.evidenceDisplayDate, locale) : isEnglish ? "Aug 14, 2026" : "14 ago 2026"}</dd>
           </div>
           <div>
             <dt>{isEnglish ? "Stack" : "Tecnologías"}</dt>
@@ -56,23 +57,41 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
           </div>
         </dl>
         <p className="evidence-stamp">
-          {isEnglish ? "Evidence as of Aug 14, 2026" : "Evidencia al 14 ago 2026"} · source{" "}
+          {caseCopy ? localize(caseCopy.evidenceStamp, locale) : isEnglish ? "Evidence as of Aug 14, 2026" : "Evidencia al 14 ago 2026"} · {isEnglish ? "source" : "fuente"}{" "}
           <a href={commitUrl} target="_blank" rel="noreferrer">
             {project.evidenceCommit.slice(0, 7)}
             <span className="sr-only"> ({copy.externalLink})</span>
           </a>
         </p>
+        {caseCopy?.heroLinks?.length ? (
+          <ul className="case-hero__actions" aria-label={isEnglish ? "Project links" : "Enlaces del proyecto"}>
+            {caseCopy.heroLinks.map((link) => (
+              <li key={link.url}>
+                <a className="button" href={link.url} target="_blank" rel="noreferrer">
+                  {localize(link.label, locale)} <span aria-hidden="true">↗</span>
+                  <span className="sr-only"> ({copy.externalLink})</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </header>
 
       <aside className="boundary-banner" aria-labelledby="boundary-banner-title">
         <p className="eyebrow">{copy.limitsLabel}</p>
         <h2 id="boundary-banner-title">
-          {isEnglish ? "Descriptive evidence, deliberately bounded" : "Evidencia descriptiva, deliberadamente acotada"}
+          {caseCopy
+            ? localize(caseCopy.boundaryTitle, locale)
+            : isEnglish
+              ? "Descriptive evidence, deliberately bounded"
+              : "Evidencia descriptiva, deliberadamente acotada"}
         </h2>
         <p>
-          {isEnglish
-            ? "This case demonstrates a reproducible analytical workflow and internal reconciliation. It does not demonstrate process capability, causal drivers, production readiness, or industrial scale."
-            : "Este caso demuestra un flujo analítico reproducible y reconciliación interna. No demuestra capacidad de proceso, causas, preparación para producción ni escala industrial."}
+          {caseCopy
+            ? localize(caseCopy.boundaryBody, locale)
+            : isEnglish
+              ? "This case demonstrates a reproducible analytical workflow and internal reconciliation. It does not demonstrate process capability, causal drivers, production readiness, or industrial scale."
+              : "Este caso demuestra un flujo analítico reproducible y reconciliación interna. No demuestra capacidad de proceso, causas, preparación para producción ni escala industrial."}
         </p>
       </aside>
 
@@ -106,9 +125,11 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
         <SectionHeader index="04" id="architecture-title" title={isEnglish ? "Architecture and data flow" : "Arquitectura y flujo de datos"} />
         <div className="case-section__content">
           <p className="section-intro">
-            {isEnglish
-              ? "Each stage narrows a different risk: source integrity, calculation clarity, persistence integrity, independent querying, decision communication, and regression protection."
-              : "Cada etapa reduce un riesgo distinto: integridad de fuentes, claridad de cálculo, integridad de persistencia, consulta independiente, comunicación de decisiones y protección ante regresiones."}
+            {caseCopy
+              ? localize(caseCopy.architectureIntro, locale)
+              : isEnglish
+                ? "Each stage narrows a different risk: source integrity, calculation clarity, persistence integrity, independent querying, decision communication, and regression protection."
+                : "Cada etapa reduce un riesgo distinto: integridad de fuentes, claridad de cálculo, integridad de persistencia, consulta independiente, comunicación de decisiones y protección ante regresiones."}
           </p>
           <ol className="architecture-flow">
             {project.architecture.map((stage, index) => (
@@ -123,7 +144,7 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
       </section>
 
       <section className="case-section" aria-labelledby="validation-title">
-        <SectionHeader index="05" id="validation-title" title={isEnglish ? "Validation and reconciliation" : "Validación y reconciliación"} />
+        <SectionHeader index="05" id="validation-title" title={caseCopy ? localize(caseCopy.validationTitle, locale) : isEnglish ? "Validation and reconciliation" : "Validación y reconciliación"} />
         <div className="case-section__content">
           <ul className="validation-list">
             {project.validation.map((item) => (
@@ -137,11 +158,13 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
       <section className="findings-section" aria-labelledby="findings-title">
         <div className="findings-section__heading">
           <p className="eyebrow">06</p>
-          <h2 id="findings-title">{isEnglish ? "Evidence-backed findings" : "Hallazgos respaldados por evidencia"}</h2>
+          <h2 id="findings-title">{caseCopy ? localize(caseCopy.findingsTitle, locale) : isEnglish ? "Evidence-backed findings" : "Hallazgos respaldados por evidencia"}</h2>
           <p>
-            {isEnglish
-              ? "Every number carries its meaning and its boundary."
-              : "Cada cifra incluye su significado y su límite."}
+            {caseCopy
+              ? localize(caseCopy.findingsIntro, locale)
+              : isEnglish
+                ? "Every number carries its meaning and its boundary."
+                : "Cada cifra incluye su significado y su límite."}
           </p>
         </div>
         <div className="finding-grid">
@@ -169,7 +192,7 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
       </section>
 
       <section className="case-section limits-section" aria-labelledby="limits-title">
-        <SectionHeader index="07" id="limits-title" title={isEnglish ? "Boundaries and unsupported conclusions" : "Límites y conclusiones no respaldadas"} />
+        <SectionHeader index="07" id="limits-title" title={caseCopy ? localize(caseCopy.limitsTitle, locale) : isEnglish ? "Boundaries and unsupported conclusions" : "Límites y conclusiones no respaldadas"} />
         <div className="case-section__content">
           <ul className="limits-list">
             {project.boundaries.map((boundary) => (
@@ -183,9 +206,11 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
         <SectionHeader index="08" id="provenance-title" title={isEnglish ? "Source and provenance" : "Fuente y procedencia"} />
         <div className="case-section__content">
           <p>
-            {isEnglish
-              ? "All public technical statements on this page are bounded by the pinned repository evidence."
-              : "Todas las afirmaciones técnicas públicas de esta página están delimitadas por la evidencia fijada del repositorio."}
+            {caseCopy
+              ? localize(caseCopy.provenanceIntro, locale)
+              : isEnglish
+                ? "All public technical statements on this page are bounded by the pinned repository evidence."
+                : "Todas las afirmaciones técnicas públicas de esta página están delimitadas por la evidencia fijada del repositorio."}
           </p>
           <details className="provenance-disclosure">
             <summary>{copy.provenance}</summary>
@@ -213,9 +238,11 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
               <div>
                 <dt>{isEnglish ? "Licensing" : "Licencias"}</dt>
                 <dd>
-                  {isEnglish
-                    ? "Project-authored code and documentation are MIT. The original UCI SECOM files and derived representations, including the screenshot, retain CC BY 4.0."
-                    : "El código y la documentación del proyecto usan MIT. Los archivos originales UCI SECOM y sus representaciones derivadas, incluida la captura, conservan CC BY 4.0."}
+                  {caseCopy
+                    ? localize(caseCopy.licensing, locale)
+                    : isEnglish
+                      ? "Project-authored code and documentation are MIT. The original UCI SECOM files and derived representations, including the screenshot, retain CC BY 4.0."
+                      : "El código y la documentación del proyecto usan MIT. Los archivos originales UCI SECOM y sus representaciones derivadas, incluida la captura, conservan CC BY 4.0."}
                 </dd>
               </div>
             </dl>

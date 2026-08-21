@@ -30,9 +30,10 @@ export interface WorkPreview {
 }
 
 const qualityOps = getProject("qualityops");
+const paro = getProject("paro-live-oee-platform");
 
-if (!qualityOps) {
-  throw new Error("The published QualityOps case is required for selected work.");
+if (!qualityOps || !paro) {
+  throw new Error("The published QualityOps and PARO cases are required for selected work.");
 }
 
 export const selectedWorkItems: WorkPreview[] = [
@@ -54,45 +55,20 @@ export const selectedWorkItems: WorkPreview[] = [
     },
   },
   {
-    id: "paro",
-    status: "development",
-    year: "2026",
-    title: { en: "PARO", es: "PARO" },
-    projectType: {
-      en: "Operational data platform for manufacturing",
-      es: "Plataforma de datos operativos para manufactura",
-    },
-    summary: {
-      en: "Captures downtime events and production records, calculates OEE deterministically and auditably, and exposes an analytics schema connectable to Power BI.",
-      es: "Captura paros y registros de producción, calcula OEE de forma determinista y auditable, y expone un esquema analítico conectable a Power BI.",
-    },
-    technologies: ["Python 3.14", "FastAPI", "Pydantic", "SQLAlchemy", "Alembic", "PostgreSQL"],
-    notes: [
-      {
-        en: "The OEE engine, migrations, HTTP API, and two analytical views already exist.",
-        es: "El motor OEE, las migraciones, la API HTTP y dos vistas analíticas ya existen.",
-      },
-      {
-        en: "Local development uses SQLite; PostgreSQL is validated in CI.",
-        es: "El desarrollo local usa SQLite; PostgreSQL se valida en CI.",
-      },
-    ],
-    boundary: {
-      en: "Synthetic demonstration data · No frontend, authentication, sensors, or MES integration",
-      es: "Datos de demostración sintéticos · Sin frontend, autenticación, sensores ni integración MES",
-    },
+    id: paro.slug,
+    status: "published",
+    year: paro.year,
+    title: paro.title,
+    projectType: paro.projectType,
+    summary: paro.shortSummary,
+    technologies: paro.technologies,
+    caseSlug: paro.slug,
     visual: {
-      kind: "flow",
-      label: {
-        en: "PARO operational data flow",
-        es: "Flujo de datos operativos de PARO",
-      },
-      stages: [
-        { en: "Downtime events", es: "Eventos de paro" },
-        { en: "OEE engine", es: "Motor OEE" },
-        { en: "PostgreSQL views", es: "Vistas PostgreSQL" },
-        { en: "Power BI", es: "Power BI" },
-      ],
+      kind: "image",
+      src: paro.images[0].src,
+      width: paro.images[0].width,
+      height: paro.images[0].height,
+      alt: paro.images[0].alt,
     },
   },
 ];
