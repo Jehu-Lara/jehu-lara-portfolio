@@ -222,7 +222,7 @@ test("project archive and cases come from the reusable project contract", async 
     const visibleHtml = html.replace(/<script[\s\S]*?<\/script>/gi, "");
     const locale = pathname.startsWith("/es") ? "es" : "en";
     const oppositeLocale = locale === "en" ? "es" : "en";
-    assert.match(html, /bedfe76733578ff889a66b5f8eeedd8f03a93863/);
+    assert.match(html, /0429517e0aeacd607959eb70ff51d84acb23e44e/);
     assert.match(html, /206/);
     assert.match(html, /15 min/);
     assert.match(html, /48 h/);
@@ -239,6 +239,14 @@ test("project archive and cases come from the reusable project contract", async 
     assert.doesNotMatch(visibleHtml, /Live demo|Demo en vivo/i, `${pathname} does not claim an undeployed demo link`);
     assert.doesNotMatch(html, /mailto:|Jehulara422@gmail\.com/i);
     assert.match(html, /"@type":"SoftwareSourceCode"/);
+    if (locale === "en") {
+      assert.match(html, /PARO Live OEE evidence presentation/);
+      assert.match(visibleHtml, /·\s*(?:<!-- -->\s*)?source/);
+    } else {
+      assert.match(html, /Presentación de evidencia de PARO OEE en vivo/);
+      assert.match(visibleHtml, /·\s*(?:<!-- -->\s*)?fuente/);
+      assert.doesNotMatch(visibleHtml, /·\s*(?:<!-- -->\s*)?source/);
+    }
   }
 });
 
@@ -301,6 +309,7 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /:focus-visible/);
   assert.match(css, /min-height:\s*44px/);
+  assert.match(css, /\.case-hero__actions a\s*\{[^}]*min-height:\s*48px/s);
   const projectMediaRule = css.match(/\.project-card__media\s*\{([^}]*)\}/s)?.[1] ?? "";
   assert.match(projectMediaRule, /width:\s*100%/);
   assert.match(projectMediaRule, /min-width:\s*0/);
@@ -342,6 +351,7 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
   assert.match(gallery, /decoding="async"/);
   assert.match(gallery, /Open full-resolution slide/);
   assert.match(gallery, /Abrir diapositiva en resolución completa/);
+  assert.match(gallery, /project\.slug === "paro-live-oee-platform" \? "paro" : project\.slug/);
   assert.match(gallery, /ArrowLeft/);
   assert.match(gallery, /ArrowRight/);
   assert.match(gallery, /event\.key === "Escape" && dialogRef\.current\?\.open/);

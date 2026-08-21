@@ -57,7 +57,7 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
           </div>
         </dl>
         <p className="evidence-stamp">
-          {caseCopy ? localize(caseCopy.evidenceStamp, locale) : isEnglish ? "Evidence as of Aug 14, 2026" : "Evidencia al 14 ago 2026"} · source{" "}
+          {caseCopy ? localize(caseCopy.evidenceStamp, locale) : isEnglish ? "Evidence as of Aug 14, 2026" : "Evidencia al 14 ago 2026"} · {isEnglish ? "source" : "fuente"}{" "}
           <a href={commitUrl} target="_blank" rel="noreferrer">
             {project.evidenceCommit.slice(0, 7)}
             <span className="sr-only"> ({copy.externalLink})</span>
