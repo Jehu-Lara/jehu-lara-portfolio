@@ -222,21 +222,22 @@ test("project archive and cases come from the reusable project contract", async 
     const visibleHtml = html.replace(/<script[\s\S]*?<\/script>/gi, "");
     const locale = pathname.startsWith("/es") ? "es" : "en";
     const oppositeLocale = locale === "en" ? "es" : "en";
-    assert.match(html, /396bd2b25bbbd70c849cacebc8b33a45a917628a/);
-    assert.match(html, /206/);
+    assert.match(html, /42a6a4fbb141f579c55d4c2fbdb8bf0c9427d1c0/);
+    assert.match(html, /208/);
     assert.match(html, /15 min/);
     assert.match(html, /48 h/);
     assert.match(html, /22\.1%/);
     assert.match(html, /synthetic|sintético/i);
-    assert.match(html, /Power BI Desktop refresh and the final Desktop capture remain explicitly pending|refresh en Power BI Desktop y la captura final de Desktop permanecen explícitamente pendientes/);
-    assert.match(html, /Render authentication, cron secrets, and production verification remain operator-gated|autenticación en Render, los secretos del cron y la verificación productiva permanecen bajo gate del operador/);
+    assert.match(html, /Power BI Desktop refreshed successfully|Power BI Desktop actualizó correctamente/);
+    assert.match(html, /Render write authentication and the 15-minute cron were active|autenticación de escritura en Render y el cron de 15 minutos estaban activos/);
     assert.equal(countMatches(html, /class="architecture-flow__number"/g), 4);
     assert.equal(countMatches(html, /class="evidence-thumbnail"/g), 3);
     assert.match(html, new RegExp(`/presentations/paro/${locale}/01-case-study\\.png`));
     assert.doesNotMatch(html, new RegExp(`/presentations/paro/${oppositeLocale}/`));
     assert.match(html, /View code|Ver código/);
-    assert.match(html, /Review deployment gate|Revisar gate de despliegue/);
-    assert.doesNotMatch(visibleHtml, /Live demo|Demo en vivo/i, `${pathname} does not claim an undeployed demo link`);
+    assert.match(html, /Review deployment contract|Revisar contrato de despliegue/);
+    assert.match(html, /href="https:\/\/paro-public\.onrender\.com\/demo"/);
+    assert.match(visibleHtml, /Live demo|Demo en vivo/i);
     assert.doesNotMatch(html, /mailto:|Jehulara422@gmail\.com/i);
     assert.match(html, /"@type":"SoftwareSourceCode"/);
     if (locale === "en") {

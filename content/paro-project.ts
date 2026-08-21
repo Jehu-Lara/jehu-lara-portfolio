@@ -1,7 +1,8 @@
 import type { Project } from "./types";
 
-const evidenceCommit = "396bd2b25bbbd70c849cacebc8b33a45a917628a";
+const evidenceCommit = "42a6a4fbb141f579c55d4c2fbdb8bf0c9427d1c0";
 const repositoryUrl = "https://github.com/Jehu-Lara/paro-public";
+const demoUrl = "https://paro-public.onrender.com/demo";
 
 export const paroProject: Project = {
   slug: "paro-live-oee-platform",
@@ -90,16 +91,16 @@ export const paroProject: Project = {
   ],
   validation: [
     {
-      en: "The complete local suite contains 206 tests, including crossed credential combinations, secret-log canaries, readiness/liveness behavior, deterministic replay, non-colliding days, open-event closure, and 48-hour catch-up.",
-      es: "La suite local completa contiene 206 pruebas, incluidas combinaciones cruzadas de credenciales, canarios de secretos en logs, readiness/liveness, repetición determinista, jornadas sin colisiones, cierre de eventos y catch-up de 48 horas.",
+      en: "The complete local suite contains 208 tests, including crossed credential combinations, secret-log canaries, readiness/liveness behavior, deterministic replay, non-colliding days, open-event closure, and 48-hour catch-up.",
+      es: "La suite local completa contiene 208 pruebas, incluidas combinaciones cruzadas de credenciales, canarios de secretos en logs, readiness/liveness, repetición determinista, jornadas sin colisiones, cierre de eventos y catch-up de 48 horas.",
     },
     {
       en: "A full synthetic production day stays inside the configured 70–80% OEE band after correcting the serial-line counting model; the dashboard uses the same domain result.",
       es: "Una jornada sintética completa permanece dentro de la banda OEE configurada de 70–80 % después de corregir el conteo de línea serial; el dashboard usa el mismo resultado de dominio.",
     },
     {
-      en: "The PBIR structural validator reports zero errors. Power BI Desktop refresh and the final Desktop capture remain explicitly pending.",
-      es: "El validador estructural PBIR reporta cero errores. El refresh en Power BI Desktop y la captura final de Desktop permanecen explícitamente pendientes.",
+      en: "The PBIR structural validator reports zero errors. Power BI Desktop refreshed successfully and the final evidence uses the authentic Desktop capture.",
+      es: "El validador estructural PBIR reporta cero errores. Power BI Desktop actualizó correctamente y la evidencia final usa la captura auténtica de Desktop.",
     },
   ],
   findings: [
@@ -136,7 +137,7 @@ export const paroProject: Project = {
       },
     },
     {
-      value: "206",
+      value: "208",
       label: { en: "local automated tests", es: "pruebas automatizadas locales" },
       represents: {
         en: "The complete test collection at the pinned evidence commit.",
@@ -178,12 +179,12 @@ export const paroProject: Project = {
       es: "El feed avanza cada 15 minutos y la página consulta cada 60 segundos. No es streaming, sensores en tiempo real ni conectividad MES.",
     },
     {
-      en: "Render authentication, cron secrets, and production verification remain operator-gated until the external deployment checklist passes.",
-      es: "La autenticación en Render, los secretos del cron y la verificación productiva permanecen bajo gate del operador hasta aprobar el checklist externo.",
+      en: "Render write authentication and the 15-minute cron were active at verification; clients receive no write credentials.",
+      es: "La autenticación de escritura en Render y el cron de 15 minutos estaban activos al verificar; los clientes no reciben credenciales de escritura.",
     },
     {
-      en: "Power BI is an authored Import-mode model with zero PBIR structural errors; a refreshed Desktop capture is not yet evidence.",
-      es: "Power BI es un modelo Import ya construido con cero errores estructurales PBIR; una captura actualizada de Desktop aún no es evidencia.",
+      en: "Power BI uses Import mode and shows a verified point-in-time refresh; it is not a streaming surface.",
+      es: "Power BI usa modo Import y muestra una actualización puntual verificada; no es una superficie de streaming.",
     },
     {
       en: "ROI values are illustrative sensitivity scenarios, not savings claims. Avoided downtime and scrap are assigned zero benefit.",
@@ -202,8 +203,8 @@ export const paroProject: Project = {
         kind: "image",
         title: { en: "Read-only OEE dashboard", es: "Dashboard OEE de solo lectura" },
         caption: {
-          en: "Authentic local capture of the synthetic shift view: OEE, A/P/Q, freshness, output, and downtime Pareto.",
-          es: "Captura local auténtica de la vista de turno sintético: OEE, A/P/Q, frescura, producción y Pareto de paros.",
+          en: "Authentic Power BI Desktop capture of the synthetic shift view: OEE, A/P/Q, output, and downtime Pareto.",
+          es: "Captura auténtica de Power BI Desktop de la vista de turno sintético: OEE, A/P/Q, producción y Pareto de paros.",
         },
         body: [],
         image: {
@@ -280,12 +281,12 @@ export const paroProject: Project = {
         es: "Thumbnail de PARO OEE sintético con el dashboard auténtico.",
       },
       longDescription: {
-        en: "The thumbnail preserves the authentic local dashboard showing OEE 81.3%, Availability 94.5%, Performance 88.1%, Quality 97.7%, and an explicit synthetic-data disclosure.",
-        es: "El thumbnail conserva el dashboard local auténtico con OEE 81.3 %, Availability 94.5 %, Performance 88.1 %, Quality 97.7 % y aviso explícito de datos sintéticos.",
+        en: "The thumbnail preserves the authentic Power BI Desktop capture showing OEE 69.7%, Availability 81.6%, Performance 87.6%, Quality 97.6%, and an explicit synthetic-data disclosure.",
+        es: "El thumbnail conserva la captura auténtica de Power BI Desktop con OEE 69.7 %, Availability 81.6 %, Performance 87.6 %, Quality 97.6 % y aviso explícito de datos sintéticos.",
       },
       attribution: {
-        en: "Authentic local capture generated from deterministic synthetic portfolio data.",
-        es: "Captura local auténtica generada con datos sintéticos deterministas de portafolio.",
+        en: "Authentic Power BI Desktop capture generated from deterministic synthetic portfolio data.",
+        es: "Captura auténtica de Power BI Desktop generada con datos sintéticos deterministas de portafolio.",
       },
     },
   ],
@@ -336,8 +337,8 @@ export const paroProject: Project = {
     },
     limitsTitle: { en: "Honest limits", es: "Límites honestos" },
     provenanceIntro: {
-      en: "All public statements on this page are bounded by the pinned implementation commit and the explicitly pending external gates.",
-      es: "Todas las afirmaciones públicas de esta página están delimitadas por el commit de implementación fijado y los gates externos explícitamente pendientes.",
+      en: "All public statements on this page are bounded by the pinned implementation commit and the documented verification limits.",
+      es: "Todas las afirmaciones públicas de esta página están delimitadas por el commit de implementación fijado y los límites de verificación documentados.",
     },
     licensing: {
       en: "Project-authored code, documentation, dashboard assets, and synthetic data are published under the repository's MIT license.",
@@ -346,12 +347,17 @@ export const paroProject: Project = {
     programmingLanguages: ["Python", "SQL", "DAX", "JavaScript"],
     heroLinks: [
       {
+        label: { en: "Live demo", es: "Demo en vivo" },
+        url: demoUrl,
+        kind: "evidence",
+      },
+      {
         label: { en: "View code", es: "Ver código" },
         url: repositoryUrl,
         kind: "repository",
       },
       {
-        label: { en: "Review deployment gate", es: "Revisar gate de despliegue" },
+        label: { en: "Review deployment contract", es: "Revisar contrato de despliegue" },
         url: `${repositoryUrl}/blob/${evidenceCommit}/docs/deployment.md`,
         kind: "evidence",
       },
