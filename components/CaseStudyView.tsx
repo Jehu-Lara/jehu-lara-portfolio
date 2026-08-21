@@ -19,21 +19,34 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
   const isEnglish = locale === "en";
   const commitUrl = `${project.repositoryUrl}/commit/${project.evidenceCommit}`;
   const caseCopy = project.caseCopy;
+  const evidenceSourceUrl = caseCopy?.evidenceSourceUrl ?? commitUrl;
+  const evidenceSourceLabel = caseCopy?.evidenceSourceLabel
+    ? localize(caseCopy.evidenceSourceLabel, locale)
+    : project.evidenceCommit.slice(0, 7);
+  const structuredData = caseCopy?.structuredDataType === "CreativeWork"
+    ? {
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        name: localize(project.title, locale),
+        description: localize(project.shortSummary, locale),
+        url: project.repositoryUrl,
+        dateModified: project.evidenceDate,
+        keywords: project.disciplines,
+      }
+    : {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        name: localize(project.title, locale),
+        description: localize(project.shortSummary, locale),
+        codeRepository: project.repositoryUrl,
+        license: `${project.repositoryUrl}/blob/${project.evidenceCommit}/LICENSE`,
+        dateModified: project.evidenceDate,
+        programmingLanguage: caseCopy?.programmingLanguages ?? ["Python", "SQL", "DAX"],
+      };
 
   return (
     <SiteShell locale={locale} pageKind="project" slug={project.slug}>
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          "@type": "SoftwareSourceCode",
-          name: localize(project.title, locale),
-          description: localize(project.shortSummary, locale),
-          codeRepository: project.repositoryUrl,
-          license: `${project.repositoryUrl}/blob/${project.evidenceCommit}/LICENSE`,
-          dateModified: project.evidenceDate,
-          programmingLanguage: caseCopy?.programmingLanguages ?? ["Python", "SQL", "DAX"],
-        }}
-      />
+      <StructuredData data={structuredData} />
 
       <header className="case-hero grid-frame">
         <p className="eyebrow">01 / {copy.caseStudy}</p>
@@ -58,8 +71,8 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
         </dl>
         <p className="evidence-stamp">
           {caseCopy ? localize(caseCopy.evidenceStamp, locale) : isEnglish ? "Evidence as of Aug 14, 2026" : "Evidencia al 14 ago 2026"} · {isEnglish ? "source" : "fuente"}{" "}
-          <a href={commitUrl} target="_blank" rel="noreferrer">
-            {project.evidenceCommit.slice(0, 7)}
+          <a href={evidenceSourceUrl} target="_blank" rel="noreferrer">
+            {evidenceSourceLabel}
             <span className="sr-only"> ({copy.externalLink})</span>
           </a>
         </p>
@@ -216,12 +229,12 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
             <summary>{copy.provenance}</summary>
             <dl>
               <div>
-                <dt>{isEnglish ? "Repository" : "Repositorio"}</dt>
+                <dt>{caseCopy?.sourceTypeLabel ? localize(caseCopy.sourceTypeLabel, locale) : isEnglish ? "Repository" : "Repositorio"}</dt>
                 <dd><a href={project.repositoryUrl}>{project.repositoryUrl}</a></dd>
               </div>
               <div>
-                <dt>SHA</dt>
-                <dd><a href={commitUrl}>{project.evidenceCommit}</a></dd>
+                <dt>{caseCopy?.sourceIdentifierLabel ? localize(caseCopy.sourceIdentifierLabel, locale) : "SHA"}</dt>
+                <dd><a href={evidenceSourceUrl}>{project.evidenceCommit}</a></dd>
               </div>
               <div>
                 <dt>{isEnglish ? "Evidence date" : "Fecha de evidencia"}</dt>

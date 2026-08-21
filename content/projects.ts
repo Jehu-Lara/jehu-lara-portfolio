@@ -1,5 +1,6 @@
 import type { Locale, Project } from "./types";
 import { paroProject } from "./paro-project";
+import { dmaicProject } from "./dmaic-project";
 
 export const projects: Project[] = [
   {
@@ -482,6 +483,7 @@ export const projects: Project[] = [
     ],
   },
   paroProject,
+  dmaicProject,
 ];
 
 export function getPublishedProjects(): Project[] {
