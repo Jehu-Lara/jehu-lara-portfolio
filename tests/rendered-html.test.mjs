@@ -222,7 +222,7 @@ test("project archive and cases come from the reusable project contract", async 
     const visibleHtml = html.replace(/<script[\s\S]*?<\/script>/gi, "");
     const locale = pathname.startsWith("/es") ? "es" : "en";
     const oppositeLocale = locale === "en" ? "es" : "en";
-    assert.match(html, /0429517e0aeacd607959eb70ff51d84acb23e44e/);
+    assert.match(html, /396bd2b25bbbd70c849cacebc8b33a45a917628a/);
     assert.match(html, /206/);
     assert.match(html, /15 min/);
     assert.match(html, /48 h/);

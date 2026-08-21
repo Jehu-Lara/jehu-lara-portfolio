@@ -1,6 +1,6 @@
 import type { Project } from "./types";
 
-const evidenceCommit = "0429517e0aeacd607959eb70ff51d84acb23e44e";
+const evidenceCommit = "396bd2b25bbbd70c849cacebc8b33a45a917628a";
 const repositoryUrl = "https://github.com/Jehu-Lara/paro-public";
 
 export const paroProject: Project = {
