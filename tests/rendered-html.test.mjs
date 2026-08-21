@@ -47,10 +47,12 @@ const routes = [
   ["/work", "en", "Work", "/es/work"],
   ["/work/qualityops", "en", "QualityOps", "/es/work/qualityops"],
   ["/work/paro-live-oee-platform", "en", "PARO Live OEE", "/es/work/paro-live-oee-platform"],
+  ["/work/dmaic-pcba-case", "en", "DMAIC PCBA Case", "/es/work/dmaic-pcba-case"],
   ["/es", "es-MX", "Convierto datos operativos en decisiones auditables.", "/"],
   ["/es/work", "es-MX", "Proyectos", "/work"],
   ["/es/work/qualityops", "es-MX", "QualityOps", "/work/qualityops"],
   ["/es/work/paro-live-oee-platform", "es-MX", "PARO OEE en vivo", "/work/paro-live-oee-platform"],
+  ["/es/work/dmaic-pcba-case", "es-MX", "Caso DMAIC de PCBA", "/work/dmaic-pcba-case"],
 ];
 
 const linkedInUrl = "https://www.linkedin.com/in/jehu-lara-corona-601956332/";
@@ -77,7 +79,7 @@ const deckHashes = {
   "es/05-roadmap.png": "AC3DB643A767D71AA9275369ACA91447CA2AC5A8DFD0D3E3B2ECA82803771C5C",
 };
 
-test("server-renders all eight localized routes with semantic essentials", async () => {
+test("server-renders all ten localized routes with semantic essentials", async () => {
   const titles = new Set();
   const descriptions = new Set();
 
@@ -146,13 +148,14 @@ test("home leads with personal identity and keeps the project subordinate", asyn
     assert.match(visibleHtml, /class="selected-work-reel"/);
     assert.match(visibleHtml, /aria-roledescription="carousel"/);
     assert.match(visibleHtml, /aria-live="polite"/);
-    assert.equal(countMatches(visibleHtml, /data-work-preview-id=/g), 2, `${pathname} has two reel indicators`);
+    assert.equal(countMatches(visibleHtml, /data-work-preview-id=/g), 3, `${pathname} has three reel indicators`);
     assert.match(visibleHtml, /data-work-preview-id="qualityops"/);
     assert.match(visibleHtml, /data-work-preview-id="paro-live-oee-platform"/);
+    assert.match(visibleHtml, /data-work-preview-id="dmaic-pcba-case"/);
     assert.match(visibleHtml, /Previous project|Proyecto anterior/);
     assert.match(visibleHtml, /Next project|Proyecto siguiente/);
     assert.match(visibleHtml, pathname === "/" ? /href="\/work\/qualityops"/ : /href="\/es\/work\/qualityops"/);
-    assert.match(visibleHtml, /two versioned open-source cases|dos casos de código abierto versionados/);
+    assert.match(visibleHtml, /two versioned open-source cases and one report-backed DMAIC case|dos casos abiertos versionados y un caso DMAIC respaldado por reporte/);
     assert.equal(countMatches(visibleHtml, /<article class="project-card project-card--preview/g), 1, `${pathname} renders only the active slide`);
   }
 });
@@ -164,8 +167,9 @@ test("project archive and cases come from the reusable project contract", async 
     assert.match(html, /Independent open-source technical project|Proyecto técnico independiente y de código abierto/);
     assert.match(html, /2026/);
     assert.match(html, /Manufacturing analytics|Análisis de manufactura/);
-    assert.equal(countMatches(html, /<article class="project-card/g), 2);
+    assert.equal(countMatches(html, /<article class="project-card/g), 3);
     assert.match(visibleHtml, /PARO Live OEE|PARO OEE en vivo/);
+    assert.match(visibleHtml, /DMAIC PCBA Case|Caso DMAIC de PCBA/);
   }
 
   for (const pathname of ["/work/qualityops", "/es/work/qualityops"]) {
@@ -249,6 +253,35 @@ test("project archive and cases come from the reusable project contract", async 
       assert.doesNotMatch(visibleHtml, /·\s*(?:<!-- -->\s*)?source/);
     }
   }
+
+  for (const pathname of ["/work/dmaic-pcba-case", "/es/work/dmaic-pcba-case"]) {
+    const { html } = await render(pathname);
+    const visibleHtml = html.replace(/<script[\s\S]*?<\/script>/gi, "");
+    const locale = pathname.startsWith("/es") ? "es" : "en";
+    const oppositeLocale = locale === "en" ? "es" : "en";
+    assert.match(html, /1F770A1BB0D1A2E70A6F18D25CCE2927F04A41F2BA6ACA6BD358CF7E11D49606/);
+    assert.match(html, /62%/);
+    assert.match(html, /Cpk 0\.67/);
+    assert.match(html, /Cpk 1\.97/);
+    assert.match(html, /116\.7%/);
+    assert.match(html, /4\.06/);
+    assert.match(html, /illustrative|ilustrativ/i);
+    assert.match(html, /PPAP/);
+    assert.match(html, /report PDF|PDF del reporte/);
+    assert.match(html, /href="\/reports\/Proyecto-DMAIC-FINAL\.pdf"/);
+    assert.equal(countMatches(html, /class="architecture-flow__number"/g), 4);
+    assert.equal(countMatches(html, /class="evidence-thumbnail"/g), 5);
+    assert.match(html, new RegExp(`/presentations/dmaic-pcba-case/${locale}/01-overview\\.png`));
+    assert.doesNotMatch(html, new RegExp(`/presentations/dmaic-pcba-case/${oppositeLocale}/`));
+    assert.match(html, /"@type":"CreativeWork"/);
+    assert.doesNotMatch(html, /"@type":"SoftwareSourceCode"/);
+    assert.doesNotMatch(html, /mailto:|Jehulara422@gmail\.com/i);
+    if (locale === "en") {
+      assert.match(visibleHtml, /DMAIC evidence dashboard in five views/);
+    } else {
+      assert.match(visibleHtml, /Dashboard de evidencia DMAIC en cinco vistas/);
+    }
+  }
 });
 
 test("assets, reel, visual tokens, gallery behavior, and dependency boundary match the contract", async () => {
@@ -301,6 +334,30 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
       `PARO slide ${index + 1} is intentionally identical across locale folders`,
     );
   }
+
+  const dmaicThumb = await readFile(new URL("../public/dmaic-case-thumbnail-1000x750.png", import.meta.url));
+  const dmaicSlideNames = ["01-overview.png", "02-measure.png", "03-analyze-improve.png", "04-control.png", "05-roadmap.png"];
+  const dmaicSlides = await Promise.all(
+    ["en", "es"].flatMap((locale) =>
+      dmaicSlideNames.map((name) => readFile(new URL(`../public/presentations/dmaic-pcba-case/${locale}/${name}`, import.meta.url))),
+    ),
+  );
+  const dmaicReport = await readFile(new URL("../public/reports/Proyecto-DMAIC-FINAL.pdf", import.meta.url));
+  assert.deepEqual([dmaicThumb.readUInt32BE(16), dmaicThumb.readUInt32BE(20)], [1000, 750]);
+  dmaicSlides.forEach((asset) => {
+    assert.deepEqual([asset.readUInt32BE(16), asset.readUInt32BE(20)], [1920, 1080]);
+  });
+  for (let index = 0; index < 5; index += 1) {
+    assert.equal(
+      createHash("sha256").update(dmaicSlides[index]).digest("hex"),
+      createHash("sha256").update(dmaicSlides[index + 5]).digest("hex"),
+      `DMAIC slide ${index + 1} is intentionally identical across locale folders`,
+    );
+  }
+  assert.equal(
+    createHash("sha256").update(dmaicReport).digest("hex").toUpperCase(),
+    "1F770A1BB0D1A2E70A6F18D25CCE2927F04A41F2BA6ACA6BD358CF7E11D49606",
+  );
 
   assert.ok(contrastRatio("10233f", "f4efe4") >= 4.5, "navy text on ivory");
   assert.ok(contrastRatio("006b62", "f4efe4") >= 4.5, "teal text on ivory");
@@ -372,11 +429,14 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
   assert.match(reel, /onPointerUp/);
   assert.match(reel, /const currentItem = items\[currentIndex\]/);
   assert.doesNotMatch(reel, /setInterval|autoPlay|autoplay/);
-  assert.equal(countMatches(workPreviews, /\nid: |\n {4}id:/g), 2, "the reel data has two previews");
+  assert.equal(countMatches(workPreviews, /\nid: |\n {4}id:/g), 3, "the reel data has three previews");
   assert.match(workPreviews, /getProject\("paro-live-oee-platform"\)/);
   assert.match(workPreviews, /status: "published"/);
   assert.match(workPreviews, /caseSlug: paro\.slug/);
   assert.match(workPreviews, /src: paro\.images\[0\]\.src/);
+  assert.match(workPreviews, /getProject\("dmaic-pcba-case"\)/);
+  assert.match(workPreviews, /caseSlug: dmaic\.slug/);
+  assert.match(workPreviews, /src: dmaic\.images\[0\]\.src/);
   assert.match(css, /\.selected-work-reel__viewport\s*\{[^}]*overflow:\s*hidden[^}]*touch-action:\s*pan-y/s);
   assert.match(css, /\.selected-work-reel__indicators\s*\{[^}]*overflow-x:\s*auto[^}]*scroll-snap-type:\s*inline mandatory/s);
   assert.doesNotMatch(packageJson, /react-loading-skeleton|drizzle|animation|analytics/i);

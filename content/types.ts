@@ -82,6 +82,11 @@ export interface CaseStudyCopy {
   provenanceIntro: LocalizedText;
   licensing: LocalizedText;
   programmingLanguages: string[];
+  structuredDataType?: "SoftwareSourceCode" | "CreativeWork";
+  evidenceSourceUrl?: string;
+  evidenceSourceLabel?: LocalizedText;
+  sourceTypeLabel?: LocalizedText;
+  sourceIdentifierLabel?: LocalizedText;
   heroLinks?: ProjectLink[];
 }
 

@@ -2097,6 +2097,17 @@ h3 {
     font-size: clamp(2.55rem, 13vw, 4rem);
   }
 
+  .case-hero__title h1 {
+    font-size: clamp(2.6rem, 14vw, 4rem);
+    text-wrap: wrap;
+  }
+
+  .case-hero__summary {
+    font-size: var(--step-1);
+    line-height: 1.35;
+    text-wrap: pretty;
+  }
+
   .hero__actions,
   .contact__actions,
   .source-links {

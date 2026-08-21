@@ -15,7 +15,7 @@ export const siteCopy = {
     viewWork: "View selected work",
     selectedWork: "Selected work",
     selectedWorkIntro:
-      "Two published cases make their evidence, limits, and current verification state inspectable.",
+      "Three published cases make their evidence, limits, and current verification state inspectable.",
     selectedWorkReelLabel: "Selected work reel",
     selectedWorkPrevious: "Previous project",
     selectedWorkNext: "Next project",
@@ -61,7 +61,7 @@ export const siteCopy = {
     contactEyebrow: "Contact",
     contactTitle: "Review the work or start a conversation",
     contactBody:
-      "Email is available for direct contact, GitHub contains the source and versioned evidence behind the published cases, and LinkedIn is available for professional contact.",
+      "Email is available for direct contact, GitHub contains source and versioned evidence for the open-source cases, the DMAIC case links its full report, and LinkedIn is available for professional contact.",
     visitGithub: "Visit Jehu Lara on GitHub",
     visitLinkedin: "Connect with Jehu Lara on LinkedIn",
     archiveEyebrow: "Project archive",
@@ -102,7 +102,7 @@ export const siteCopy = {
     viewWork: "Ver trabajo seleccionado",
     selectedWork: "Trabajo seleccionado",
     selectedWorkIntro:
-      "Dos casos publicados hacen inspeccionables su evidencia, límites y estado actual de verificación.",
+      "Tres casos publicados hacen inspeccionables su evidencia, límites y estado actual de verificación.",
     selectedWorkReelLabel: "Reel de trabajo seleccionado",
     selectedWorkPrevious: "Proyecto anterior",
     selectedWorkNext: "Proyecto siguiente",
@@ -148,7 +148,7 @@ export const siteCopy = {
     contactEyebrow: "Contacto",
     contactTitle: "Revisa el trabajo o inicia una conversación",
     contactBody:
-      "El correo está disponible para contacto directo, GitHub contiene el código fuente y la evidencia versionada del caso publicado, y LinkedIn está disponible para contacto profesional.",
+      "El correo está disponible para contacto directo, GitHub contiene código y evidencia versionada de los casos abiertos, el caso DMAIC enlaza su reporte completo y LinkedIn está disponible para contacto profesional.",
     visitGithub: "Visitar a Jehu Lara en GitHub",
     visitLinkedin: "Conectar con Jehu Lara en LinkedIn",
     archiveEyebrow: "Archivo de proyectos",

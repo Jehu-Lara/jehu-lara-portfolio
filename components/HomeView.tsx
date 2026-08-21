@@ -61,8 +61,8 @@ export function HomeView({ locale }: { locale: Locale }) {
           <span aria-hidden="true">↘</span>
           <p>
             {locale === "en"
-              ? "Public evidence available: two versioned open-source cases."
-              : "Evidencia pública disponible: dos casos de código abierto versionados."}
+              ? "Public evidence available: two versioned open-source cases and one report-backed DMAIC case."
+              : "Evidencia pública disponible: dos casos abiertos versionados y un caso DMAIC respaldado por reporte."}
           </p>
         </div>
       </section>
