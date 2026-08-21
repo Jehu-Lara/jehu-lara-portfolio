@@ -18,7 +18,7 @@ export function EvidenceGallery({ project, locale }: { project: Project; locale:
   const currentItem = items[currentIndex];
 
   function imageSource(item: EvidencePresentationItem) {
-    return `/presentations/qualityops/${locale}/${localize(item.image.src, locale)}`;
+    return `/presentations/${project.slug === "qualityops" ? "qualityops" : "paro"}/${locale}/${localize(item.image.src, locale)}`;
   }
 
   function slideStatus(index: number) {

@@ -15,8 +15,9 @@ export function ProjectCard({
 }) {
   const copy = siteCopy[locale];
   const image = project.images[0];
-  const disciplines =
-    locale === "es"
+  const disciplines = project.archiveDisciplines
+    ? localize(project.archiveDisciplines, locale)
+    : locale === "es"
       ? "Análisis de manufactura · Python · PostgreSQL · Power BI"
       : "Manufacturing analytics · Python · PostgreSQL · Power BI";
 

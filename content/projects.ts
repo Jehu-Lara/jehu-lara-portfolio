@@ -1,4 +1,5 @@
 import type { Locale, Project } from "./types";
+import { paroProject } from "./paro-project";
 
 export const projects: Project[] = [
   {
@@ -480,6 +481,7 @@ export const projects: Project[] = [
       },
     ],
   },
+  paroProject,
 ];
 
 export function getPublishedProjects(): Project[] {

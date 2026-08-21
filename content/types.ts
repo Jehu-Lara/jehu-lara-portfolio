@@ -69,6 +69,22 @@ export interface ProjectLink {
   kind: "repository" | "evidence" | "license";
 }
 
+export interface CaseStudyCopy {
+  evidenceDisplayDate: LocalizedText;
+  evidenceStamp: LocalizedText;
+  boundaryTitle: LocalizedText;
+  boundaryBody: LocalizedText;
+  architectureIntro: LocalizedText;
+  validationTitle: LocalizedText;
+  findingsTitle: LocalizedText;
+  findingsIntro: LocalizedText;
+  limitsTitle: LocalizedText;
+  provenanceIntro: LocalizedText;
+  licensing: LocalizedText;
+  programmingLanguages: string[];
+  heroLinks?: ProjectLink[];
+}
+
 export interface Project {
   slug: string;
   status: ProjectStatus;
@@ -94,4 +110,6 @@ export interface Project {
   evidenceDocuments: string[];
   images: ProjectImage[];
   links: ProjectLink[];
+  archiveDisciplines?: LocalizedText;
+  caseCopy?: CaseStudyCopy;
 }
