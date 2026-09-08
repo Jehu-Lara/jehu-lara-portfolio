@@ -39,3 +39,7 @@ yarn-error.log*
 /.wrangler/
 /outputs/
 /work/
+
+# local portfolio artifact authoring
+/.tmp-rag-portfolio/
+*.pptx.inspect.ndjson

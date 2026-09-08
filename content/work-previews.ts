@@ -32,9 +32,10 @@ export interface WorkPreview {
 const qualityOps = getProject("qualityops");
 const paro = getProject("paro-live-oee-platform");
 const dmaic = getProject("dmaic-pcba-case");
+const rag = getProject("manufacturing-rag-assistant");
 
-if (!qualityOps || !paro || !dmaic) {
-  throw new Error("The published QualityOps, PARO, and DMAIC cases are required for selected work.");
+if (!qualityOps || !paro || !dmaic || !rag) {
+  throw new Error("The published QualityOps, PARO, DMAIC, and Manufacturing RAG cases are required for selected work.");
 }
 
 export const selectedWorkItems: WorkPreview[] = [
@@ -87,6 +88,23 @@ export const selectedWorkItems: WorkPreview[] = [
       width: dmaic.images[0].width,
       height: dmaic.images[0].height,
       alt: dmaic.images[0].alt,
+    },
+  },
+  {
+    id: rag.slug,
+    status: "published",
+    year: rag.year,
+    title: rag.title,
+    projectType: rag.projectType,
+    summary: rag.shortSummary,
+    technologies: rag.technologies,
+    caseSlug: rag.slug,
+    visual: {
+      kind: "image",
+      src: rag.images[0].src,
+      width: rag.images[0].width,
+      height: rag.images[0].height,
+      alt: rag.images[0].alt,
     },
   },
 ];
