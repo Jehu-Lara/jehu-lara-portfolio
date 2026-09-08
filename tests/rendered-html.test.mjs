@@ -48,11 +48,13 @@ const routes = [
   ["/work/qualityops", "en", "QualityOps", "/es/work/qualityops"],
   ["/work/paro-live-oee-platform", "en", "PARO Live OEE", "/es/work/paro-live-oee-platform"],
   ["/work/dmaic-pcba-case", "en", "DMAIC PCBA Case", "/es/work/dmaic-pcba-case"],
+  ["/work/manufacturing-rag-assistant", "en", "Manufacturing RAG Assistant", "/es/work/manufacturing-rag-assistant"],
   ["/es", "es-MX", "Convierto datos operativos en decisiones auditables.", "/"],
   ["/es/work", "es-MX", "Proyectos", "/work"],
   ["/es/work/qualityops", "es-MX", "QualityOps", "/work/qualityops"],
   ["/es/work/paro-live-oee-platform", "es-MX", "PARO OEE en vivo", "/work/paro-live-oee-platform"],
   ["/es/work/dmaic-pcba-case", "es-MX", "Caso DMAIC de PCBA", "/work/dmaic-pcba-case"],
+  ["/es/work/manufacturing-rag-assistant", "es-MX", "Asistente RAG de Manufactura", "/work/manufacturing-rag-assistant"],
 ];
 
 const linkedInUrl = "https://www.linkedin.com/in/jehu-lara-corona-601956332/";
@@ -79,7 +81,7 @@ const deckHashes = {
   "es/05-roadmap.png": "AC3DB643A767D71AA9275369ACA91447CA2AC5A8DFD0D3E3B2ECA82803771C5C",
 };
 
-test("server-renders all ten localized routes with semantic essentials", async () => {
+test("server-renders all localized routes with semantic essentials", async () => {
   const titles = new Set();
   const descriptions = new Set();
 
@@ -148,14 +150,15 @@ test("home leads with personal identity and keeps the project subordinate", asyn
     assert.match(visibleHtml, /class="selected-work-reel"/);
     assert.match(visibleHtml, /aria-roledescription="carousel"/);
     assert.match(visibleHtml, /aria-live="polite"/);
-    assert.equal(countMatches(visibleHtml, /data-work-preview-id=/g), 3, `${pathname} has three reel indicators`);
+    assert.equal(countMatches(visibleHtml, /data-work-preview-id=/g), 4, `${pathname} has four reel indicators`);
     assert.match(visibleHtml, /data-work-preview-id="qualityops"/);
     assert.match(visibleHtml, /data-work-preview-id="paro-live-oee-platform"/);
     assert.match(visibleHtml, /data-work-preview-id="dmaic-pcba-case"/);
+    assert.match(visibleHtml, /data-work-preview-id="manufacturing-rag-assistant"/);
     assert.match(visibleHtml, /Previous project|Proyecto anterior/);
     assert.match(visibleHtml, /Next project|Proyecto siguiente/);
     assert.match(visibleHtml, pathname === "/" ? /href="\/work\/qualityops"/ : /href="\/es\/work\/qualityops"/);
-    assert.match(visibleHtml, /two versioned open-source cases and one report-backed DMAIC case|dos casos abiertos versionados y un caso DMAIC respaldado por reporte/);
+    assert.match(visibleHtml, /three versioned open-source cases and one report-backed DMAIC case|tres casos abiertos versionados y un caso DMAIC respaldado por reporte/);
     assert.equal(countMatches(visibleHtml, /<article class="project-card project-card--preview/g), 1, `${pathname} renders only the active slide`);
   }
 });
@@ -167,9 +170,10 @@ test("project archive and cases come from the reusable project contract", async 
     assert.match(html, /Independent open-source technical project|Proyecto técnico independiente y de código abierto/);
     assert.match(html, /2026/);
     assert.match(html, /Manufacturing analytics|Análisis de manufactura/);
-    assert.equal(countMatches(html, /<article class="project-card/g), 3);
+    assert.equal(countMatches(html, /<article class="project-card/g), 4);
     assert.match(visibleHtml, /PARO Live OEE|PARO OEE en vivo/);
     assert.match(visibleHtml, /DMAIC PCBA Case|Caso DMAIC de PCBA/);
+    assert.match(visibleHtml, /Manufacturing RAG Assistant|Asistente RAG de Manufactura/);
   }
 
   for (const pathname of ["/work/qualityops", "/es/work/qualityops"]) {
@@ -282,6 +286,38 @@ test("project archive and cases come from the reusable project contract", async 
       assert.match(visibleHtml, /Dashboard de evidencia DMAIC en cinco vistas/);
     }
   }
+
+  for (const pathname of ["/work/manufacturing-rag-assistant", "/es/work/manufacturing-rag-assistant"]) {
+    const { html } = await render(pathname);
+    const visibleHtml = html.replace(/<script[\s\S]*?<\/script>/gi, "");
+    const locale = pathname.startsWith("/es") ? "es" : "en";
+    const oppositeLocale = locale === "en" ? "es" : "en";
+    assert.match(html, /60420f12444c2886be793db785be1f6e6d0508db/);
+    assert.match(html, /0\.887/);
+    assert.match(html, /0\.844/);
+    assert.match(html, /0\.917/);
+    assert.match(html, /0\.825/);
+    assert.match(html, /0\.721/);
+    assert.match(html, /0\.900/);
+    assert.match(html, /0\.967/);
+    assert.match(html, /0\.767/);
+    assert.match(html, /23\/30|23 \/ 30/);
+    assert.match(html, /historical raw-v1|históricas? de raw-v1/i);
+    assert.match(html, /not re-measured on contextual-v1|no se volvieron a medir en contextual-v1/i);
+    assert.match(html, /functional public portfolio demo|demo pública funcional de portafolio/i);
+    assert.match(html, /href="https:\/\/jehulara-manufacturing-rag-assistant-live\.hf\.space"/);
+    assert.match(html, /href="https:\/\/github\.com\/Jehu-Lara\/manufacturing-rag-assistant"/);
+    assert.match(html, /href="\/presentations\/manufacturing-rag-assistant\/manufacturing-rag-assistant-evidence-deck\.pptx"/);
+    assert.equal(countMatches(html, /class="architecture-flow__number"/g), 4);
+    assert.equal(countMatches(html, /class="evidence-thumbnail"/g), 5);
+    assert.match(html, new RegExp(`/presentations/manufacturing-rag-assistant/${locale}/01-overview\\.png`));
+    assert.doesNotMatch(html, new RegExp(`/presentations/manufacturing-rag-assistant/${oppositeLocale}/`));
+    assert.match(visibleHtml, /Live demo|Demo en vivo/);
+    assert.match(visibleHtml, /Download evidence deck|Descargar presentación/);
+    assert.match(html, /does not establish production readiness|no establece preparación productiva/i);
+    assert.doesNotMatch(html, /mailto:|Jehulara422@gmail\.com/i);
+    assert.match(html, /"@type":"SoftwareSourceCode"/);
+  }
 });
 
 test("assets, reel, visual tokens, gallery behavior, and dependency boundary match the contract", async () => {
@@ -359,6 +395,20 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
     "1F770A1BB0D1A2E70A6F18D25CCE2927F04A41F2BA6ACA6BD358CF7E11D49606",
   );
 
+  const ragThumb = await readFile(new URL("../public/manufacturing-rag-assistant-thumbnail.png", import.meta.url));
+  const ragSlideNames = ["01-overview.png", "02-architecture.png", "03-evaluation.png", "04-live-evidence.png", "05-boundaries.png"];
+  const ragSlides = await Promise.all(
+    ["en", "es"].flatMap((locale) =>
+      ragSlideNames.map((name) => readFile(new URL(`../public/presentations/manufacturing-rag-assistant/${locale}/${name}`, import.meta.url))),
+    ),
+  );
+  const ragDeck = await readFile(new URL("../public/presentations/manufacturing-rag-assistant/manufacturing-rag-assistant-evidence-deck.pptx", import.meta.url));
+  assert.deepEqual([ragThumb.readUInt32BE(16), ragThumb.readUInt32BE(20)], [1000, 750]);
+  ragSlides.forEach((asset) => {
+    assert.deepEqual([asset.readUInt32BE(16), asset.readUInt32BE(20)], [1920, 1080]);
+  });
+  assert.ok(ragDeck.length > 100000, "the downloadable bilingual evidence deck is present");
+
   assert.ok(contrastRatio("10233f", "f4efe4") >= 4.5, "navy text on ivory");
   assert.ok(contrastRatio("006b62", "f4efe4") >= 4.5, "teal text on ivory");
   assert.ok(contrastRatio("10233f", "f3d59a") >= 4.5, "navy text on amber");
@@ -400,6 +450,7 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
   assert.match(zoomLayoutRule, /\.case-section\s*\{[^}]*grid-template-columns:\s*1fr/s);
   assert.match(zoomLayoutRule, /\.evidence-gallery__caption\s*\{[^}]*grid-template-columns:\s*1fr/s);
   assert.doesNotMatch(css, /min-height:\s*clamp\(28rem|min-height:\s*32rem|min-height:\s*min\(72vh|min-height:\s*calc\(100vh - 12rem\)/);
+  assert.match(css, /@media \(max-width:\s*900px\)[\s\S]*?\.case-hero__actions[\s\S]*?grid-column:\s*1/s);
   assert.doesNotMatch(css, /\.evidence-gallery__expand\s*\{[^}]*position:\s*absolute/s);
   assert.match(css, /@media \(max-width:\s*580px\)/);
   assert.match(gallery, /<figure/);
@@ -429,7 +480,7 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
   assert.match(reel, /onPointerUp/);
   assert.match(reel, /const currentItem = items\[currentIndex\]/);
   assert.doesNotMatch(reel, /setInterval|autoPlay|autoplay/);
-  assert.equal(countMatches(workPreviews, /\nid: |\n {4}id:/g), 3, "the reel data has three previews");
+  assert.equal(countMatches(workPreviews, /\nid: |\n {4}id:/g), 4, "the reel data has four previews");
   assert.match(workPreviews, /getProject\("paro-live-oee-platform"\)/);
   assert.match(workPreviews, /status: "published"/);
   assert.match(workPreviews, /caseSlug: paro\.slug/);
@@ -437,6 +488,9 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
   assert.match(workPreviews, /getProject\("dmaic-pcba-case"\)/);
   assert.match(workPreviews, /caseSlug: dmaic\.slug/);
   assert.match(workPreviews, /src: dmaic\.images\[0\]\.src/);
+  assert.match(workPreviews, /getProject\("manufacturing-rag-assistant"\)/);
+  assert.match(workPreviews, /caseSlug: rag\.slug/);
+  assert.match(workPreviews, /src: rag\.images\[0\]\.src/);
   assert.match(css, /\.selected-work-reel__viewport\s*\{[^}]*overflow:\s*hidden[^}]*touch-action:\s*pan-y/s);
   assert.match(css, /\.selected-work-reel__indicators\s*\{[^}]*overflow-x:\s*auto[^}]*scroll-snap-type:\s*inline mandatory/s);
   assert.doesNotMatch(packageJson, /react-loading-skeleton|drizzle|animation|analytics/i);
