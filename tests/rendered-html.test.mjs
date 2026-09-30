@@ -144,22 +144,20 @@ test("home leads with personal identity and keeps the project subordinate", asyn
     assert.match(html, /"@type":"ProfilePage"/);
     assert.match(html, /"sameAs":\["https:\/\/github\.com\/Jehu-Lara","https:\/\/www\.linkedin\.com\/in\/jehu-lara-corona-601956332\/"\]/);
     assert.doesNotMatch(html, /"jobTitle"|"email"|"address"|"worksFor"/);
-    assert.match(html, /Email is available for direct contact|El correo está disponible para contacto directo/);
+    assert.match(html, /Contact me about quality engineering|Escríbeme sobre ingeniería de calidad/);
     assert.match(html, /GitHub/);
     assert.match(html, /LinkedIn/);
-    assert.match(visibleHtml, /class="selected-work-reel"/);
-    assert.match(visibleHtml, /aria-roledescription="carousel"/);
-    assert.match(visibleHtml, /aria-live="polite"/);
-    assert.equal(countMatches(visibleHtml, /data-work-preview-id=/g), 4, `${pathname} has four reel indicators`);
+    assert.match(visibleHtml, /class="selected-work-grid"/);
+    assert.doesNotMatch(visibleHtml, /aria-roledescription="carousel"/);
+    assert.equal(countMatches(visibleHtml, /data-work-preview-id=/g), 4, `${pathname} exposes all four projects`);
     assert.match(visibleHtml, /data-work-preview-id="qualityops"/);
     assert.match(visibleHtml, /data-work-preview-id="paro-live-oee-platform"/);
     assert.match(visibleHtml, /data-work-preview-id="dmaic-pcba-case"/);
     assert.match(visibleHtml, /data-work-preview-id="manufacturing-rag-assistant"/);
-    assert.match(visibleHtml, /Previous project|Proyecto anterior/);
-    assert.match(visibleHtml, /Next project|Proyecto siguiente/);
     assert.match(visibleHtml, pathname === "/" ? /href="\/work\/qualityops"/ : /href="\/es\/work\/qualityops"/);
     assert.match(visibleHtml, /three versioned open-source cases and one report-backed DMAIC case|tres casos abiertos versionados y un caso DMAIC respaldado por reporte/);
-    assert.equal(countMatches(visibleHtml, /<article class="project-card project-card--preview/g), 1, `${pathname} renders only the active slide`);
+    assert.equal(countMatches(visibleHtml, /<article class="project-card"/g), 4, `${pathname} renders four directly accessible cases`);
+    assert.doesNotMatch(visibleHtml, /Three published cases|Tres casos publicados/);
   }
 });
 
@@ -364,10 +362,10 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
     assert.deepEqual([asset.readUInt32BE(16), asset.readUInt32BE(20)], [1920, 1080]);
   });
   for (let index = 0; index < 3; index += 1) {
-    assert.equal(
+    assert.notEqual(
       createHash("sha256").update(paroSlides[index]).digest("hex"),
       createHash("sha256").update(paroSlides[index + 3]).digest("hex"),
-      `PARO slide ${index + 1} is intentionally identical across locale folders`,
+      `PARO slide ${index + 1} has a distinct localized export`,
     );
   }
 
@@ -409,16 +407,17 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
   });
   assert.ok(ragDeck.length > 100000, "the downloadable bilingual evidence deck is present");
 
-  assert.ok(contrastRatio("10233f", "f4efe4") >= 4.5, "navy text on ivory");
-  assert.ok(contrastRatio("006b62", "f4efe4") >= 4.5, "teal text on ivory");
-  assert.ok(contrastRatio("10233f", "f3d59a") >= 4.5, "navy text on amber");
-  assert.ok(contrastRatio("10233f", "fffdf8") >= 4.5, "contact GitHub navy text on paper");
-  assert.ok(contrastRatio("10233f", "d8ece7") >= 4.5, "contact GitHub hover text on teal soft");
+  assert.ok(contrastRatio("142c46", "f7f9fc") >= 4.5, "navy text on cool background");
+  assert.ok(contrastRatio("435a72", "f7f9fc") >= 4.5, "body text on cool background");
+  assert.ok(contrastRatio("006b62", "f7f9fc") >= 4.5, "teal text on cool background");
+  assert.ok(contrastRatio("142c46", "f3d59a") >= 4.5, "navy text on amber");
+  assert.ok(contrastRatio("142c46", "ffffff") >= 4.5, "contact GitHub navy text on white");
+  assert.ok(contrastRatio("142c46", "d8ece7") >= 4.5, "contact GitHub hover text on teal soft");
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /:focus-visible/);
   assert.match(css, /min-height:\s*44px/);
   assert.match(css, /\.case-hero__actions a\s*\{[^}]*min-height:\s*48px/s);
-  const projectMediaRule = css.match(/\.project-card__media\s*\{([^}]*)\}/s)?.[1] ?? "";
+  const projectMediaRule = css.match(/^\.project-card__media\s*\{([^}]*)\}/ms)?.[1] ?? "";
   assert.match(projectMediaRule, /width:\s*100%/);
   assert.match(projectMediaRule, /min-width:\s*0/);
   assert.match(projectMediaRule, /overflow:\s*hidden/);
@@ -435,13 +434,15 @@ test("assets, reel, visual tokens, gallery behavior, and dependency boundary mat
   assert.match(reducedMotionRule, /\.project-card:hover,\s*\.project-card:focus-within\s*\{[^}]*transform:\s*none/s);
   assert.match(css, /\.evidence-slide__image\s*\{[^}]*object-fit:\s*contain/s);
   assert.match(css, /\.evidence-slide__image\s*\{[^}]*max-width:\s*100%/s);
+  assert.match(css, /\.evidence-slide__image\s*\{[^}]*min-height:\s*0/s);
   const deckRule = css.match(/\.evidence-slide--deck\s*\{([^}]*)\}/s)?.[1] ?? "";
   assert.match(deckRule, /margin:\s*0/);
   assert.match(deckRule, /padding:\s*0/);
   assert.match(deckRule, /width:\s*100%/);
   assert.match(deckRule, /height:\s*100%/);
+  assert.match(deckRule, /grid-template-rows:\s*minmax\(0,\s*1fr\)/);
   assert.match(css, /\.evidence-gallery__viewport\s*\{[^}]*aspect-ratio:\s*16\s*\/\s*9[^}]*min-height:\s*0/s);
-  assert.match(css, /\.evidence-lightbox__slide\s*\{[^}]*min-height:\s*0[^}]*aspect-ratio:\s*16\s*\/\s*9/s);
+  assert.match(css, /\.evidence-lightbox__slide\s*\{[^}]*min-height:\s*0[^}]*aspect-ratio:\s*auto/s);
   assert.match(css, /scroll-snap-type:\s*inline mandatory/);
   assert.match(css, /overflow-x:\s*auto/);
   assert.match(css, /\.evidence-gallery__body\s*\{[^}]*grid-template-columns:\s*repeat\(auto-fit,\s*minmax\(min\(100%,\s*18rem\),\s*1fr\)\)/s);

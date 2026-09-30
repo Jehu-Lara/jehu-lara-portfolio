@@ -1,15 +1,18 @@
 import { profile } from "@/content/profile";
 import { siteCopy } from "@/content/site-copy";
 import type { Locale } from "@/content/types";
-import { selectedWorkItems } from "@/content/work-previews";
+import { getPublishedProjects } from "@/content/projects";
 import { routeFor } from "@/lib/routes";
-import { SelectedWorkReel } from "./SelectedWorkReel";
+import { ProjectCard } from "./ProjectCard";
 import { SiteShell } from "./SiteShell";
 import { StructuredData } from "./StructuredData";
 import { LinkedInLink } from "./LinkedInLink";
 
 export function HomeView({ locale }: { locale: Locale }) {
   const copy = siteCopy[locale];
+  const projects = getPublishedProjects().sort((a, b) =>
+    Number(b.slug === "manufacturing-rag-assistant") - Number(a.slug === "manufacturing-rag-assistant"),
+  );
 
   return (
     <SiteShell locale={locale} pageKind="home">
@@ -26,9 +29,6 @@ export function HomeView({ locale }: { locale: Locale }) {
         }}
       />
       <section className="hero grid-frame" aria-labelledby="home-title">
-        <div className="hero__index" aria-hidden="true">
-          01 / PROFILE
-        </div>
         <div className="hero__identity">
           <p className="eyebrow">{profile.displayName}</p>
           <p className="professional-label">{profile.professionalLabel}</p>
@@ -58,7 +58,6 @@ export function HomeView({ locale }: { locale: Locale }) {
           </div>
         </div>
         <div className="hero__evidence-note">
-          <span aria-hidden="true">↘</span>
           <p>
             {locale === "en"
               ? "Public evidence available: three versioned open-source cases and one report-backed DMAIC case."
@@ -69,22 +68,22 @@ export function HomeView({ locale }: { locale: Locale }) {
 
       <section className="section selected-work" id="selected-work" aria-labelledby="selected-title">
         <div className="section-heading">
-          <p className="eyebrow">02 / {copy.selectedWork}</p>
           <h2 id="selected-title">{copy.selectedWork}</h2>
           <p>{copy.selectedWorkIntro}</p>
         </div>
-        <SelectedWorkReel items={selectedWorkItems} locale={locale} />
+        <div className="selected-work-grid">
+          {projects.map((project) => <ProjectCard key={project.slug} project={project} locale={locale} />)}
+        </div>
       </section>
 
       <section className="section principles" aria-labelledby="principles-title">
         <div className="section-heading section-heading--narrow">
-          <p className="eyebrow">03 / {copy.principlesEyebrow}</p>
           <h2 id="principles-title">{copy.principlesTitle}</h2>
         </div>
         <ol className="principle-grid">
           {copy.principles.map((principle, index) => (
             <li key={principle.title}>
-              <span className="principle-number">0{index + 1}</span>
+              <span className="principle-number" aria-hidden="true">0{index + 1}</span>
               <h3>{principle.title}</h3>
               <p>{principle.body}</p>
             </li>
@@ -94,7 +93,6 @@ export function HomeView({ locale }: { locale: Locale }) {
 
       <section className="section capabilities" aria-labelledby="capabilities-title">
         <div className="section-heading section-heading--narrow">
-          <p className="eyebrow">04 / {copy.capabilitiesEyebrow}</p>
           <h2 id="capabilities-title">{copy.capabilitiesTitle}</h2>
         </div>
         <ul className="capability-list">
@@ -106,7 +104,6 @@ export function HomeView({ locale }: { locale: Locale }) {
 
       <section className="section about" id="about" aria-labelledby="about-title">
         <div>
-          <p className="eyebrow">05 / {copy.aboutEyebrow}</p>
           <h2 id="about-title">{copy.aboutTitle}</h2>
         </div>
         <div>
@@ -118,7 +115,6 @@ export function HomeView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section contact" id="contact" aria-labelledby="contact-title">
-        <p className="eyebrow">06 / {copy.contactEyebrow}</p>
         <h2 id="contact-title">{copy.contactTitle}</h2>
         <p>{copy.contactBody}</p>
         <div className="contact__actions">

@@ -22,7 +22,7 @@ export function ProjectCard({
       : "Manufacturing analytics · Python · PostgreSQL · Power BI";
 
   return (
-    <article className={`project-card${compact ? " project-card--compact" : ""}`}>
+    <article className={`project-card${compact ? " project-card--compact" : ""}`} data-work-preview-id={project.slug}>
       <div className="project-card__media">
         {/* Static evidence has intrinsic dimensions; native img avoids a client image runtime. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}

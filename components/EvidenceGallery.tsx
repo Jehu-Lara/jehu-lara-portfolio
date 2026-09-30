@@ -55,7 +55,7 @@ export function EvidenceGallery({ project, locale }: { project: Project; locale:
           width={item.image.width}
           height={item.image.height}
           alt={localize(item.image.alt, locale)}
-          loading="lazy"
+          loading="eager"
           decoding="async"
         />
         <figcaption className="sr-only">{status}. {title}. {caption}</figcaption>
@@ -110,6 +110,7 @@ export function EvidenceGallery({ project, locale }: { project: Project; locale:
           if (Math.abs(distance) < 45) return;
           select(distance > 0 ? currentIndex - 1 : currentIndex + 1);
         }}
+        onPointerCancel={() => { pointerStartX.current = null; }}
       >
         {renderSlide(currentItem, currentIndex)}
       </div>
@@ -192,9 +193,17 @@ export function EvidenceGallery({ project, locale }: { project: Project; locale:
           <p id="evidence-lightbox-title">
             {currentIndex + 1} {copy.presentationOf} {items.length} · {localize(currentItem.title, locale)}
           </p>
-          <form method="dialog">
-            <button ref={closeButtonRef} type="submit">{copy.presentationClose}</button>
-          </form>
+          <div className="evidence-lightbox__controls">
+            <button type="button" onClick={() => select(currentIndex - 1)} disabled={currentIndex === 0}>
+              {copy.presentationPrevious}
+            </button>
+            <button type="button" onClick={() => select(currentIndex + 1)} disabled={currentIndex === items.length - 1}>
+              {copy.presentationNext}
+            </button>
+            <form method="dialog">
+              <button ref={closeButtonRef} type="submit">{copy.presentationClose}</button>
+            </form>
+          </div>
         </div>
         <div className="evidence-lightbox__slide">{renderSlide(currentItem, currentIndex, true)}</div>
         <div className="evidence-lightbox__caption" id="evidence-lightbox-caption">

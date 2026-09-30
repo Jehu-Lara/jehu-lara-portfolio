@@ -4,6 +4,7 @@ import { siteCopy } from "@/content/site-copy";
 import { EvidenceGallery } from "./EvidenceGallery";
 import { SiteShell } from "./SiteShell";
 import { StructuredData } from "./StructuredData";
+import { routeFor } from "@/lib/routes";
 
 function SectionHeader({ index, title, id }: { index: string; title: string; id: string }) {
   return (
@@ -49,7 +50,7 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
       <StructuredData data={structuredData} />
 
       <header className="case-hero grid-frame">
-        <p className="eyebrow">01 / {copy.caseStudy}</p>
+        <a className="case-back-link" href={routeFor(locale, "work")}>{isEnglish ? "All projects" : "Todos los proyectos"}</a>
         <div className="case-hero__title">
           <h1>{localize(project.title, locale)}</h1>
           <p>{localize(project.projectType, locale)}</p>
@@ -107,6 +108,14 @@ export function CaseStudyView({ project, locale }: { project: Project; locale: L
               : "Este caso demuestra un flujo analítico reproducible y reconciliación interna. No demuestra capacidad de proceso, causas, preparación para producción ni escala industrial."}
         </p>
       </aside>
+
+      <nav className="case-navigation" aria-label={isEnglish ? "On this page" : "En esta página"}>
+        <a href="#summary-title">{isEnglish ? "Overview" : "Resumen"}</a>
+        <a href="#validation-title">{isEnglish ? "Evidence" : "Evidencia"}</a>
+        <a href="#findings-title">{isEnglish ? "Findings" : "Hallazgos"}</a>
+        <a href="#limits-title">{isEnglish ? "Limits" : "Límites"}</a>
+        <a href="#provenance-title">{isEnglish ? "Sources" : "Fuentes"}</a>
+      </nav>
 
       <section className="case-section" aria-labelledby="summary-title">
         <SectionHeader index="02" id="summary-title" title={isEnglish ? "Executive summary" : "Resumen ejecutivo"} />
