@@ -43,13 +43,13 @@ function contrastRatio(foreground, background) {
 }
 
 const routes = [
-  ["/", "en", "I turn operational data into auditable decisions.", "/es"],
+  ["/", "en", "From real problems to new companies.", "/es"],
   ["/work", "en", "Work", "/es/work"],
   ["/work/qualityops", "en", "QualityOps", "/es/work/qualityops"],
   ["/work/paro-live-oee-platform", "en", "PARO Live OEE", "/es/work/paro-live-oee-platform"],
   ["/work/dmaic-pcba-case", "en", "DMAIC PCBA Case", "/es/work/dmaic-pcba-case"],
   ["/work/manufacturing-rag-assistant", "en", "Manufacturing RAG Assistant", "/es/work/manufacturing-rag-assistant"],
-  ["/es", "es-MX", "Convierto datos operativos en decisiones auditables.", "/"],
+  ["/es", "es-MX", "De problemas reales a nuevas empresas.", "/"],
   ["/es/work", "es-MX", "Proyectos", "/work"],
   ["/es/work/qualityops", "es-MX", "QualityOps", "/work/qualityops"],
   ["/es/work/paro-live-oee-platform", "es-MX", "PARO OEE en vivo", "/work/paro-live-oee-platform"],
@@ -128,13 +128,29 @@ test("server-renders all localized routes with semantic essentials", async () =>
   }
 });
 
-test("home leads with personal identity and keeps the project subordinate", async () => {
+test("home presents the confirmed founder role and current venture before technical work", async () => {
   for (const pathname of ["/", "/es"]) {
     const { html } = await render(pathname);
     const visibleHtml = html.replace(/<script[\s\S]*?<\/script>/gi, "");
     assert.match(html, /Jehu Lara/);
-    assert.match(html, /Quality &amp; Analytics Engineer|Quality & Analytics Engineer/);
-    assert.match(html, /View selected work|Ver trabajo seleccionado/);
+    const english = pathname === "/";
+    const role = english ? /Founder &amp; CEO of Reperta/ : /Fundador y CEO de Reperta/;
+    assert.match(visibleHtml, role, `${pathname} shows the localized confirmed role`);
+    assert.match(html.match(/<title>(.*?)<\/title>/i)?.[1] ?? "", role, `${pathname} metadata agrees with the role`);
+    assert.match(html.match(/<meta[^>]+name="description"[^>]+content="([^"]+)"/i)?.[1] ?? "", /Reperta/, `${pathname} description names the current venture`);
+    assert.doesNotMatch(visibleHtml, /Quality (?:&amp;|&) Analytics Engineer|Manufacturing Data Analyst|I am targeting|Busco oportunidades/);
+    assert.match(visibleHtml, english ? /View technical work/ : /Ver proyectos técnicos/);
+    const ventureStart = visibleHtml.indexOf('id="reperta"');
+    const workStart = visibleHtml.indexOf('id="selected-work"');
+    assert.ok(ventureStart > visibleHtml.indexOf("<h1") && ventureStart < workStart, `${pathname} current venture precedes the technical archive`);
+    assert.match(visibleHtml, /href="#reperta"/, `${pathname} primary action reaches the venture section`);
+    assert.match(visibleHtml, english ? /In development · Research and discovery/ : /En desarrollo · Investigación y descubrimiento/);
+    const ventureUrl = english ? "https://reperta.com.mx/en/" : "https://reperta.com.mx/";
+    const methodologyUrl = english ? "https://reperta.com.mx/en/what-we-learn/" : "https://reperta.com.mx/lo-que-aprendemos/";
+    for (const url of [ventureUrl, methodologyUrl]) {
+      assert.ok(visibleHtml.includes(`href="${url}" target="_blank" rel="noreferrer"`), `${pathname} has the correct public venture link: ${url}`);
+    }
+    assert.doesNotMatch(visibleHtml, /github\.com\/Jehu-Lara\/investigacion-2|CompaniaPreliminar\/equipo|14,478|14\.478/);
     assert.match(html, /Visit Jehu Lara on GitHub|Visitar a Jehu Lara en GitHub/);
     assert.match(html, /Connect with Jehu Lara on LinkedIn|Conectar con Jehu Lara en LinkedIn/);
     for (const location of ["navigation", "hero", "contact", "footer"]) {
@@ -144,7 +160,7 @@ test("home leads with personal identity and keeps the project subordinate", asyn
     assert.match(html, /"@type":"ProfilePage"/);
     assert.match(html, /"sameAs":\["https:\/\/github\.com\/Jehu-Lara","https:\/\/www\.linkedin\.com\/in\/jehu-lara-corona-601956332\/"\]/);
     assert.doesNotMatch(html, /"jobTitle"|"email"|"address"|"worksFor"/);
-    assert.match(html, /Contact me about quality engineering|Escríbeme sobre ingeniería de calidad/);
+    assert.match(visibleHtml, english ? /business problems and potential collaborations/ : /problemas de negocio y posibles colaboraciones/);
     assert.match(html, /GitHub/);
     assert.match(html, /LinkedIn/);
     assert.match(visibleHtml, /class="selected-work-grid"/);

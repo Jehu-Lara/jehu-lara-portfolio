@@ -31,13 +31,16 @@ export function HomeView({ locale }: { locale: Locale }) {
       <section className="hero grid-frame" aria-labelledby="home-title">
         <div className="hero__identity">
           <p className="eyebrow">{profile.displayName}</p>
-          <p className="professional-label">{profile.professionalLabel}</p>
+          <p className="professional-label">{profile.professionalLabel[locale]}</p>
         </div>
         <div className="hero__statement">
           <h1 id="home-title">{profile.headline[locale]}</h1>
           <p>{profile.introduction[locale]}</p>
           <div className="hero__actions">
-            <a className="button button--primary" href="#selected-work">
+            <a className="button button--primary" href="#reperta">
+              {copy.exploreVenture}
+            </a>
+            <a className="button button--secondary" href="#selected-work">
               {copy.viewWork}
             </a>
             <a
@@ -57,12 +60,29 @@ export function HomeView({ locale }: { locale: Locale }) {
             />
           </div>
         </div>
-        <div className="hero__evidence-note">
-          <p>
-            {locale === "en"
-              ? "Public evidence available: three versioned open-source cases and one report-backed DMAIC case."
-              : "Evidencia pública disponible: tres casos abiertos versionados y un caso DMAIC respaldado por reporte."}
-          </p>
+      </section>
+
+      <section className="section current-venture" id="reperta" aria-labelledby="reperta-title">
+        <div className="current-venture__identity">
+          <p className="current-venture__label">{copy.currentVenture}</p>
+          <h2 id="reperta-title" className="current-venture__wordmark">
+            {profile.currentVenture.name.toLowerCase()}<span aria-hidden="true">.</span>
+          </h2>
+          <p className="current-venture__stage">{profile.currentVenture.stage[locale]}</p>
+        </div>
+        <div className="current-venture__body">
+          <h3>{copy.ventureMission}</h3>
+          <p>{profile.currentVenture.description[locale]}</p>
+          <div className="current-venture__actions">
+            <a className="button button--primary" href={profile.currentVenture.urls[locale]} target="_blank" rel="noreferrer">
+              {copy.exploreVenture}
+              <span className="sr-only"> ({copy.externalLink})</span>
+            </a>
+            <a className="current-venture__method" href={profile.currentVenture.methodologyUrls[locale]} target="_blank" rel="noreferrer">
+              {copy.ventureMethodology}
+              <span className="sr-only"> ({copy.externalLink})</span>
+            </a>
+          </div>
         </div>
       </section>
 
@@ -73,6 +93,13 @@ export function HomeView({ locale }: { locale: Locale }) {
         </div>
         <div className="selected-work-grid">
           {projects.map((project) => <ProjectCard key={project.slug} project={project} locale={locale} />)}
+        </div>
+        <div className="work__evidence-note">
+          <p>
+            {locale === "en"
+              ? "Public evidence available: three versioned open-source cases and one report-backed DMAIC case."
+              : "Evidencia pública disponible: tres casos abiertos versionados y un caso DMAIC respaldado por reporte."}
+          </p>
         </div>
       </section>
 
@@ -109,7 +136,7 @@ export function HomeView({ locale }: { locale: Locale }) {
         <div>
           <p className="lead-copy">{copy.aboutBody}</p>
           <p className="role-line">
-            {profile.targetRoles.join(" · ")}
+            {profile.focusAreas[locale].join(" · ")}
           </p>
         </div>
       </section>

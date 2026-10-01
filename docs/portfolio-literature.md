@@ -51,13 +51,18 @@ pueden completar la historia profesional, manteniendo los proyectos como evidenc
 | Información | Qué publicar cuando se confirme | Estado |
 | --- | --- | --- |
 | Identidad y contacto | Nombre, correo y perfiles profesionales | Disponibles |
-| Objetivo profesional | Puestos o problemas de interés | Roles registrados en el perfil |
+| Actividad actual | Función, iniciativa y problemas de interés | Fundador y CEO de Reperta, confirmado por Jehu |
 | Formación | Título, institución, estado de estudios y año pertinente | Pendiente del titular |
 | Certificaciones | Nombre, emisor, fecha y enlace verificable | Pendiente del titular |
 | Experiencia | Puesto, organización, fechas y contribuciones publicables | Pendiente del titular |
 | Idiomas | Idioma y nivel real; credencial si se afirma acreditación | Pendiente del titular |
 | CV | Documento actualizado autorizado para publicación | Pendiente del titular |
 | Fotografía | Retrato profesional autorizado | Opcional |
+
+El perfil actual presenta Reperta antes de los cuatro proyectos técnicos,
+que se conservan como trayectoria. Se retiró la búsqueda de puestos de
+analista. La [nota sobre Reperta](reperta-positioning.md) documenta literatura,
+benchmarks cualitativos y límites del nuevo posicionamiento.
 
 Estos datos no bloquean las mejoras. No se publican secciones vacías ni se
 deducen títulos, certificados, empleadores, años de experiencia o niveles de

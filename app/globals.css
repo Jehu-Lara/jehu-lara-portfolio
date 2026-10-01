@@ -368,20 +368,19 @@ h3 {
   margin-inline-start: 0.5rem;
 }
 
-.hero__evidence-note {
-  grid-column: 1;
-  grid-row: 3;
+.work__evidence-note {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
   max-width: 48rem;
+  margin-top: var(--space-m);
   padding-top: var(--space-s);
   border-top: 1px solid var(--line-dark);
   color: var(--navy-soft);
   font-size: var(--step--1);
 }
 
-.hero__evidence-note p {
+.work__evidence-note p {
   margin: 0;
 }
 
@@ -414,6 +413,90 @@ h3 {
 
 .section-heading--narrow {
   grid-template-columns: minmax(0, 1fr);
+}
+
+.section.current-venture {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: var(--space-l);
+  padding: var(--space-l);
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  background: var(--paper);
+}
+
+.current-venture__label {
+  margin-bottom: var(--space-s);
+  color: var(--navy-soft);
+  font-size: var(--step--1);
+  font-weight: 650;
+}
+
+.current-venture__wordmark {
+  margin-bottom: var(--space-m);
+  font-size: clamp(3.1rem, 2.2rem + 3.8vw, 5.6rem);
+  font-weight: 700;
+  letter-spacing: -0.065em;
+}
+
+.current-venture__wordmark span {
+  color: #b4441f;
+}
+
+.current-venture__stage {
+  max-width: 25ch;
+  margin-bottom: 0;
+  color: var(--navy-soft);
+  font-size: var(--step--1);
+}
+
+.current-venture__body {
+  min-width: 0;
+}
+
+.current-venture__body h3 {
+  max-width: 26ch;
+  font-size: var(--step-2);
+  line-height: 1.15;
+  font-weight: 600;
+}
+
+.current-venture__body > p {
+  max-width: 58ch;
+  color: var(--navy-soft);
+}
+
+.current-venture__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s) var(--space-m);
+}
+
+.current-venture__method {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--teal);
+  font-size: var(--step--1);
+  font-weight: 650;
+}
+
+#reperta,
+#selected-work {
+  scroll-margin-top: var(--space-m);
+}
+
+@media (max-width: 850px) {
+  .section.current-venture {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-m);
+    padding: var(--space-m);
+  }
+
+  .current-venture__stage {
+    max-width: none;
+  }
 }
 
 .selected-work-grid {
@@ -2002,7 +2085,6 @@ h3 {
   .hero__index,
   .hero__identity,
   .hero__statement,
-  .hero__evidence-note,
   .archive-hero h1,
   .archive-hero > p:nth-of-type(2),
   .archive-count,
@@ -2197,7 +2279,6 @@ h3 {
     padding-top: var(--space-m);
   }
 
-  .hero__identity,
   .role-box,
   .boundary-banner,
   .project-card__body,

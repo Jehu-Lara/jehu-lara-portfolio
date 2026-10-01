@@ -1,7 +1,10 @@
 # Jehu Lara portfolio
 
 Bilingual personal portfolio for **jehulara.dev**, with English at `/` and
-Spanish at `/es`. It presents Manufacturing RAG Assistant, QualityOps,
+Spanish at `/es`. Jehu's current role is **Founder & CEO of Reperta**,
+confirmed by him on 30 September 2026. The home page presents Reperta as an
+independent studio in development in Monterrey, with public links in both
+languages. The technical portfolio presents Manufacturing RAG Assistant, QualityOps,
 PARO Live OEE, and DMAIC PCBA. Each case identifies the problem, Jehu's
 contribution, supported findings, and evidence limits.
 
@@ -32,12 +35,14 @@ CMS or contact backend. Email retains the existing Gmail compose destination.
 
 ## Content and presentation
 
-- `content/profile.ts`: confirmed public identity, contact and target roles.
+- `content/profile.ts`: confirmed public identity, contact, current focus and
+  localized Reperta links, description and stage.
 - `content/site-copy.ts`: localized interface and home copy.
 - `content/projects.ts`: published collection and localization helpers.
 - `content/*-project.ts`: PARO, DMAIC and RAG case content.
 - `content/types.ts`: shared project and presentation contracts.
-- `components/HomeView.tsx`: four directly visible project cards; no home carousel.
+- `components/HomeView.tsx`: current venture followed by four directly visible
+  technical project cards; no home carousel.
 - `components/EvidenceGallery.tsx`: manual navigation, full-resolution links and
   a keyboard-operable native dialog with previous/next controls.
 - `app/globals.css`: visual tokens and responsive layout.
@@ -71,6 +76,11 @@ outcomes without confirmed evidence.
 
 See [the literature and design decisions](docs/portfolio-literature.md) for
 engineering-portfolio guidance, usability sources, and useful profile fields.
+See [Reperta positioning and benchmarks](docs/reperta-positioning.md) for the
+founder identity, selected studio comparisons, evidence limits and the social
+card prompt. Reperta is a current initiative with its own public site, not a
+fifth completed technical case. It does not inherit technical-project metrics
+or imply demonstrated revenue, customers, or market validation.
 Education, certifications, work history and a downloadable CV remain optional
 until Jehu supplies accurate public details. No empty placeholder sections are
 shown to visitors.

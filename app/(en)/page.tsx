@@ -3,9 +3,9 @@ import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
   locale: "en",
-  title: "Jehu Lara — Quality & Analytics Engineer",
+  title: "Jehu Lara — Founder & CEO of Reperta",
   description:
-    "A personal evidence portfolio for quality, operations, and analytics work built with traceability, validation, and honest limits.",
+    "Meet Jehu Lara, founder and CEO of Reperta. Explore his current venture in Monterrey and technical work in quality, data, and applied AI.",
   englishPath: "/",
   spanishPath: "/es",
 });
@@ -13,4 +13,3 @@ export const metadata = createMetadata({
 export default function HomePage() {
   return <HomeView locale="en" />;
 }
-
